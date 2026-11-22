@@ -110,6 +110,12 @@
       </div>
 
       <ul class="booklet-tips-list" id="booklet-tips"></ul>
+
+      <div class="booklet-reset-wrap">
+        <button type="button" class="btn-reset-letters" id="btn-reset-letters">
+          🔄 Remettre les lettres à zéro
+        </button>
+      </div>
     </section>
 
     <section class="intro-banner" aria-label="Mode d'emploi">
@@ -643,6 +649,18 @@
           listEl.appendChild(card);
         });
       }
+
+      document.getElementById("btn-reset-letters").addEventListener("click", () => {
+        if (!window.confirm("Remettre à zéro toutes les lettres saisies ?")) {
+          return;
+        }
+        gridState = ["", "", "", "", "", "", ""];
+        mysteryState = ["", "", "", "", "", ""];
+        saveGrid();
+        saveMysteryGrid();
+        renderEasyGrid();
+        renderMysteryGrid();
+      });
 
       document.getElementById("btn-reset-all").addEventListener("click", () => {
         if (!window.confirm("Effacer les lettres saisies et refermer tous les indices ?")) {
