@@ -1,0 +1,562 @@
+:root {
+  --bg: #fdf8ef;
+  --surface: #ffffff;
+  --surface-alt: #f6efe2;
+  --ink: #1a2238;
+  --ink-muted: #556078;
+  --primary: #274690;
+  --primary-hover: #1d356e;
+  --accent-gold: #f4a226;
+  --border: #e5dccb;
+  --shadow: 0 6px 20px rgba(26, 34, 56, 0.08);
+
+  --lvl1-bg: #ecf9f2;
+  --lvl1-border: #8ad6ad;
+  --lvl1-badge: #1d7a4c;
+
+  --lvl2-bg: #fff6e8;
+  --lvl2-border: #f5c372;
+  --lvl2-badge: #b35c00;
+
+  --lvl3-bg: #fff0ed;
+  --lvl3-border: #f29d8f;
+  --lvl3-badge: #b82914;
+
+  --radius-lg: 18px;
+  --radius-md: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg);
+  background-image: radial-gradient(#e8dec8 1px, transparent 1px);
+  background-size: 22px 22px;
+  color: var(--ink);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 20px 16px 48px;
+}
+
+/* En-tête festif */
+.hero {
+  background: linear-gradient(135deg, #1a2238 0%, #274690 100%);
+  color: #ffffff;
+  border-radius: var(--radius-lg);
+  padding: 26px 22px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  margin-bottom: 22px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(244, 162, 38, 0.22);
+  border: 1px solid rgba(244, 162, 38, 0.65);
+  color: #ffd485;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+
+.hero h1 {
+  margin: 0 0 8px;
+  font-size: 1.65rem;
+  line-height: 1.2;
+}
+
+.hero p {
+  margin: 0;
+  color: #dce4f7;
+  font-size: 0.96rem;
+}
+
+/* Bandeau d'explication */
+.intro-banner {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--accent-gold);
+  border-radius: var(--radius-md);
+  padding: 13px 16px;
+  margin-bottom: 20px;
+  font-size: 0.92rem;
+  color: var(--ink-muted);
+  box-shadow: 0 2px 8px rgba(26, 34, 56, 0.04);
+}
+
+.intro-banner strong {
+  color: var(--ink);
+}
+
+/* Liste des 7 énigmes */
+.enigma-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.enigma-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.enigma-card.is-open {
+  border-color: var(--primary);
+}
+
+.enigma-header {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.enigma-header:hover {
+  background-color: rgba(39, 70, 144, 0.03);
+}
+
+.enigma-header:focus-visible {
+  outline: 3px solid var(--accent-gold);
+  outline-offset: -3px;
+}
+
+.enigma-num {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--surface-alt);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--primary);
+}
+
+.enigma-card.is-open .enigma-num {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+.enigma-title-group {
+  flex: 1;
+  min-width: 0;
+}
+
+.enigma-title {
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.enigma-desc {
+  margin: 3px 0 0;
+  font-size: 0.86rem;
+  color: var(--ink-muted);
+}
+
+.enigma-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.progress-pill {
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--surface-alt);
+  color: var(--ink-muted);
+}
+
+.progress-pill.has-progress {
+  background: #e3ecff;
+  color: var(--primary);
+}
+
+.chevron {
+  font-size: 1.1rem;
+  color: var(--ink-muted);
+  transition: transform 0.2s ease;
+}
+
+.enigma-card.is-open .chevron {
+  transform: rotate(180deg);
+  color: var(--primary);
+}
+
+/* Corps de carte : les 3 niveaux d'indices */
+.enigma-body {
+  display: none;
+  padding: 4px 18px 18px;
+  border-top: 1px dashed var(--border);
+}
+
+.enigma-card.is-open .enigma-body {
+  display: block;
+}
+
+.hints-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.hint-slot {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface-alt);
+  padding: 12px 14px;
+  transition: all 0.2s ease;
+}
+
+.hint-slot.revealed.level-1 {
+  background: var(--lvl1-bg);
+  border-color: var(--lvl1-border);
+}
+
+.hint-slot.revealed.level-2 {
+  background: var(--lvl2-bg);
+  border-color: var(--lvl2-border);
+}
+
+.hint-slot.revealed.level-3 {
+  background: var(--lvl3-bg);
+  border-color: var(--lvl3-border);
+}
+
+.hint-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.level-badge {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 3px 9px;
+  border-radius: 6px;
+}
+
+.level-1 .level-badge {
+  background: rgba(29, 122, 76, 0.12);
+  color: var(--lvl1-badge);
+}
+
+.level-2 .level-badge {
+  background: rgba(179, 92, 0, 0.12);
+  color: var(--lvl2-badge);
+}
+
+.level-3 .level-badge {
+  background: rgba(184, 41, 20, 0.12);
+  color: var(--lvl3-badge);
+}
+
+.btn-reveal {
+  min-height: 42px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background: var(--primary);
+  color: #ffffff;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.btn-reveal:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.btn-reveal:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn-reveal:disabled {
+  background: #d8d2c5;
+  color: #7c776b;
+  cursor: not-allowed;
+}
+
+.btn-hide-hint {
+  background: transparent;
+  border: 1px solid rgba(26, 34, 56, 0.2);
+  color: var(--ink-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-hide-hint:hover {
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink);
+}
+
+.hint-text {
+  margin: 10px 0 2px;
+  font-size: 0.97rem;
+  color: var(--ink);
+  animation: fadeIn 0.22s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Pied de page */
+.footer-actions {
+  margin-top: 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 6px rgba(26, 34, 56, 0.05);
+}
+
+.btn-secondary:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.footer-links {
+  font-size: 0.84rem;
+  color: var(--ink-muted);
+}
+
+.footer-links a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   PAGE QR CODE & AFFICHE A4 IMPRIMABLE
+   ========================================================================== */
+.qr-toolbar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+}
+
+.qr-toolbar-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.qr-url-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.qr-url-field label {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.qr-url-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.qr-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.poster-sheet {
+  background: #ffffff;
+  border: 3px solid var(--ink);
+  border-radius: 22px;
+  padding: 36px 28px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.poster-festival {
+  display: inline-block;
+  background: #1a2238;
+  color: #ffd485;
+  font-weight: 800;
+  font-size: 0.92rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 7px 16px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.poster-title {
+  margin: 0 0 8px;
+  font-size: 2.2rem;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.poster-subtitle {
+  margin: 0 auto 24px;
+  max-width: 460px;
+  font-size: 1.12rem;
+  color: var(--ink-muted);
+}
+
+.qr-frame {
+  width: min(320px, 78vw);
+  margin: 0 auto 20px;
+  padding: 14px;
+  border: 3px dashed var(--accent-gold);
+  border-radius: 20px;
+  background: #ffffff;
+}
+
+.qr-frame svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.poster-url {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: var(--surface-alt);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.88rem;
+  color: var(--ink);
+  word-break: break-all;
+}
+
+.poster-steps {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  font-size: 0.95rem;
+  color: var(--ink-muted);
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 14mm;
+  }
+
+  body {
+    background: #ffffff !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .container {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .poster-sheet {
+    box-shadow: none;
+    border-width: 3px;
+    padding: 42px 32px;
+  }
+
+  .qr-frame {
+    width: 300px;
+  }
+}

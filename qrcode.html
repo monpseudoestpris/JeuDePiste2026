@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Code — Jeu de Piste | Festival du Jeu de Seysses 2026</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <!-- Barre d'outils organisateur (masquée automatiquement à l'impression) -->
+    <section class="qr-toolbar no-print" aria-label="Outils QR Code">
+      <div class="qr-toolbar-top">
+        <a href="index.html" class="btn-secondary">← Retour aux indices</a>
+        <strong style="font-size: 0.92rem;">Affiche QR Code prête à imprimer</strong>
+      </div>
+
+      <div class="qr-url-field">
+        <label for="qr-url">Lien encodé dans le QR Code :</label>
+        <input
+          type="url"
+          id="qr-url"
+          class="qr-url-input"
+          spellcheck="false"
+          placeholder="https://monpseudoestpris.github.io/JeuDePiste2026/"
+        />
+      </div>
+
+      <div class="qr-buttons">
+        <button type="button" class="btn-primary" id="btn-print">
+          🖨️ Imprimer l'affiche (A4)
+        </button>
+        <button type="button" class="btn-secondary" id="btn-download-png">
+          ⬇️ Télécharger le QR Code (PNG)
+        </button>
+        <button type="button" class="btn-secondary" id="btn-copy-url">
+          📋 Copier le lien
+        </button>
+      </div>
+    </section>
+
+    <!-- Affiche imprimable -->
+    <section class="poster-sheet" aria-label="Affiche QR Code du jeu de piste">
+      <div class="poster-festival" id="poster-festival">
+        🎲 Festival du Jeu de Seysses 2026 🎲
+      </div>
+      <h1 class="poster-title">Jeu de Piste — Indices</h1>
+      <p class="poster-subtitle">
+        Bloqués sur l'une des 7 énigmes ? Scannez ce QR Code avec votre téléphone pour obtenir un coup de pouce !
+      </p>
+
+      <div class="qr-frame" id="qr-container" aria-live="polite"></div>
+
+      <div class="poster-url" id="poster-url-text"></div>
+
+      <div class="poster-steps">
+        <strong>3 niveaux d'indices progressifs par énigme</strong> • Sans divulgâcher directement la réponse !
+      </div>
+    </section>
+
+    <canvas id="qr-export-canvas" style="display: none;"></canvas>
+  </main>
+
+  <script src="indices.js"></script>
+  <script src="qrcode-lib.js"></script>
+  <script>
+    (function () {
+      const config = window.JEU_DE_PISTE_CONFIG || {};
+      const inputEl = document.getElementById("qr-url");
+      const containerEl = document.getElementById("qr-container");
+      const urlTextEl = document.getElementById("poster-url-text");
+      const copyBtn = document.getElementById("btn-copy-url");
+      const canvasEl = document.getElementById("qr-export-canvas");
+
+      if (config.titreFestival) {
+        document.getElementById("poster-festival").textContent =
+          "🎲 " + config.titreFestival + " 🎲";
+      }
+
+      // Détermine automatiquement l'URL publique si hébergé en http(s) non-local, sinon utilise urlSiteParDefaut
+      function detectTargetUrl() {
+        const isPublicWeb =
+          (location.protocol === "https:" || location.protocol === "http:") &&
+          location.hostname !== "localhost" &&
+          location.hostname !== "127.0.0.1";
+        if (isPublicWeb) {
+          return new URL("index.html", location.href).href.replace(/index\.html$/, "");
+        }
+        return config.urlSiteParDefaut || "https://monpseudoestpris.github.io/JeuDePiste2026/";
+      }
+
+      function updateQr() {
+        const url = inputEl.value.trim() || config.urlSiteParDefaut;
+        urlTextEl.textContent = url;
+        try {
+          containerEl.innerHTML = window.SimpleQR.toSvgString(url, 4);
+        } catch (err) {
+          containerEl.innerHTML =
+            '<p style="color:#b82914;font-weight:700;">' + err.message + "</p>";
+        }
+      }
+
+      inputEl.value = detectTargetUrl();
+      updateQr();
+
+      inputEl.addEventListener("input", updateQr);
+
+      document.getElementById("btn-print").addEventListener("click", () => {
+        window.print();
+      });
+
+      document.getElementById("btn-download-png").addEventListener("click", () => {
+        const url = inputEl.value.trim() || config.urlSiteParDefaut;
+        window.SimpleQR.drawToCanvas(canvasEl, url, 1024, 4);
+        const link = document.createElement("a");
+        link.download = "qrcode-jeu-de-piste-seysses-2026.png";
+        link.href = canvasEl.toDataURL("image/png");
+        link.click();
+      });
+
+      copyBtn.addEventListener("click", async () => {
+        const url = inputEl.value.trim();
+        try {
+          await navigator.clipboard.writeText(url);
+          const original = copyBtn.textContent;
+          copyBtn.textContent = "✅ Lien copié !";
+          setTimeout(() => {
+            copyBtn.textContent = original;
+          }, 1800);
+        } catch (_) {
+          inputEl.select();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

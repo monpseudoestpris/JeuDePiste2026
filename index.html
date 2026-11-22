@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indices — Jeu de Piste | Festival du Jeu de Seysses 2026</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="hero">
+      <div class="hero-badge" id="festival-title">🎲 Festival du Jeu de Seysses 2026</div>
+      <h1>Jeu de Piste</h1>
+      <p id="festival-subtitle">Besoin d'un coup de pouce ? Débloque les indices à ton rythme !</p>
+    </header>
+
+    <section class="intro-banner" aria-label="Mode d'emploi">
+      <strong>Anti-spoiler :</strong> Sélectionne ton énigme ci-dessous. Chaque énigme propose
+      <strong>3 niveaux d'aide</strong> de plus en plus précis (le niveau 3 donne un très gros indice, sans dévoiler la réponse exacte).
+    </section>
+
+    <section class="enigma-list" id="enigma-list" aria-label="Liste des 7 énigmes"></section>
+
+    <footer class="footer-actions">
+      <button type="button" class="btn-secondary" id="btn-reset-all">
+        🔄 Masquer tous les indices ouverts
+      </button>
+      <div class="footer-links">
+        <a href="qrcode.html">📱 Afficher / imprimer le QR Code du site</a>
+      </div>
+    </footer>
+  </main>
+
+  <script src="indices.js"></script>
+  <script>
+    (function () {
+      const STORAGE_KEY = "seysses2026_indices_state_v1";
+      const config = window.JEU_DE_PISTE_CONFIG;
+      const listEl = document.getElementById("enigma-list");
+      const levelLabels = [
+        "Indice 1 • Coup de pouce léger",
+        "Indice 2 • Piste précise",
+        "Indice 3 • Gros indice"
+      ];
+      const buttonLabels = [
+        "Débloquer l'indice 1",
+        "Débloquer l'indice 2",
+        "Débloquer l'indice 3 (gros indice)"
+      ];
+
+      if (config.titreFestival) {
+        document.getElementById("festival-title").textContent = "🎲 " + config.titreFestival;
+      }
+
+      let savedState = {};
+      try {
+        savedState = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "{}");
+      } catch (_) {
+        savedState = {};
+      }
+
+      let openCardId = null;
+
+      function saveState() {
+        try {
+          sessionStorage.setItem(STORAGE_KEY, JSON.stringify(savedState));
+        } catch (_) {}
+      }
+
+      function getRevealedCount(enigmaId) {
+        return Number(savedState[enigmaId] || 0);
+      }
+
+      function setRevealedCount(enigmaId, count) {
+        savedState[enigmaId] = count;
+        saveState();
+      }
+
+      function render() {
+        listEl.innerHTML = "";
+
+        config.enigmes.forEach((enigme) => {
+          const revealed = getRevealedCount(enigme.id);
+          const isOpen = openCardId === enigme.id;
+
+          const card = document.createElement("article");
+          card.className = "enigma-card" + (isOpen ? " is-open" : "");
+
+          // En-tête accordéon
+          const headerBtn = document.createElement("button");
+          headerBtn.type = "button";
+          headerBtn.className = "enigma-header";
+          headerBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+
+          const numBadge = document.createElement("div");
+          numBadge.className = "enigma-num";
+          numBadge.textContent = String(enigme.id);
+
+          const titleGroup = document.createElement("div");
+          titleGroup.className = "enigma-title-group";
+
+          const h2 = document.createElement("h2");
+          h2.className = "enigma-title";
+          h2.textContent = (enigme.icone ? enigme.icone + " " : "") + enigme.titre;
+
+          const desc = document.createElement("p");
+          desc.className = "enigma-desc";
+          desc.textContent = enigme.description || "";
+
+          titleGroup.appendChild(h2);
+          if (enigme.description) titleGroup.appendChild(desc);
+
+          const meta = document.createElement("div");
+          meta.className = "enigma-meta";
+
+          const pill = document.createElement("span");
+          pill.className = "progress-pill" + (revealed > 0 ? " has-progress" : "");
+          pill.textContent = revealed + "/3";
+          pill.title = revealed + " indice(s) débloqué(s) sur 3";
+
+          const chevron = document.createElement("span");
+          chevron.className = "chevron";
+          chevron.setAttribute("aria-hidden", "true");
+          chevron.textContent = "▾";
+
+          meta.appendChild(pill);
+          meta.appendChild(chevron);
+
+          headerBtn.appendChild(numBadge);
+          headerBtn.appendChild(titleGroup);
+          headerBtn.appendChild(meta);
+
+          headerBtn.addEventListener("click", () => {
+            openCardId = openCardId === enigme.id ? null : enigme.id;
+            render();
+          });
+
+          // Corps avec les 3 niveaux d'indices
+          const body = document.createElement("div");
+          body.className = "enigma-body";
+
+          const stack = document.createElement("div");
+          stack.className = "hints-stack";
+
+          (enigme.indices || []).slice(0, 3).forEach((texteIndice, idx) => {
+            const levelNum = idx + 1;
+            const isRevealed = revealed >= levelNum;
+            const canUnlock = revealed === idx;
+
+            const slot = document.createElement("div");
+            slot.className =
+              "hint-slot level-" + levelNum + (isRevealed ? " revealed" : "");
+
+            const topRow = document.createElement("div");
+            topRow.className = "hint-top";
+
+            const badge = document.createElement("span");
+            badge.className = "level-badge";
+            badge.textContent = levelLabels[idx];
+            topRow.appendChild(badge);
+
+            if (!isRevealed) {
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.className = "btn-reveal";
+              btn.disabled = !canUnlock;
+              btn.textContent = canUnlock
+                ? buttonLabels[idx]
+                : "🔒 Débloque d'abord l'indice " + idx;
+              btn.addEventListener("click", () => {
+                setRevealedCount(enigme.id, levelNum);
+                render();
+              });
+              topRow.appendChild(btn);
+            } else if (revealed === levelNum) {
+              const hideBtn = document.createElement("button");
+              hideBtn.type = "button";
+              hideBtn.className = "btn-hide-hint";
+              hideBtn.textContent = "Masquer";
+              hideBtn.addEventListener("click", () => {
+                setRevealedCount(enigme.id, levelNum - 1);
+                render();
+              });
+              topRow.appendChild(hideBtn);
+            }
+
+            slot.appendChild(topRow);
+
+            if (isRevealed) {
+              const p = document.createElement("p");
+              p.className = "hint-text";
+              p.textContent = texteIndice;
+              slot.appendChild(p);
+            }
+
+            stack.appendChild(slot);
+          });
+
+          body.appendChild(stack);
+          card.appendChild(headerBtn);
+          card.appendChild(body);
+          listEl.appendChild(card);
+        });
+      }
+
+      document.getElementById("btn-reset-all").addEventListener("click", () => {
+        savedState = {};
+        saveState();
+        render();
+      });
+
+      render();
+    })();
+  </script>
+</body>
+</html>
