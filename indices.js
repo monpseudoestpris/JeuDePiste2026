@@ -15,6 +15,11 @@ window.JEU_DE_PISTE_CONFIG = {
   motEnigmeFacile: "ETOILES",
   motEnigmeMystere: "SEYSSES",
   questionBonus: "Quel est le personnage du monde ludique qui se cache dans cette énigme mystère ?",
+  indicesBonus: [
+    "Observe bien les 6 dessins noirs en haut à droite des feuilles d'énigmes : moustache, canne, nœud papillon, chapeau haut-de-forme, sac de dollars et costume...",
+    "Il achète la Rue de la Paix, construit des maisons et des hôtels, et peut même t'envoyer en prison !",
+    "Mr. M....... !"
+  ],
 
   // Conseils généraux issus de la page 1 du livret créateur
   conseilsLivret: [
@@ -33,7 +38,7 @@ window.JEU_DE_PISTE_CONFIG = {
         "Énigme facile : mettre la réponse de « Le bon chemin… » dans la case 7."
       ],
       indices: [
-        "Méfie-toi des apparences : le grand couloir central qui semble filer tout droit est un piège (regarde bien tout en haut, il est fermé !).",
+        "Méfie-toi des apparences : le grand couloir central qui semble filer tout droit est un piège (regarde bien tout en bas, il est fermé !).",
         "C'est beaucoup plus rapide à l'envers : pars de la flèche de sortie tout en bas et remonte le labyrinthe avec ton doigt.",
         "En partant de la sortie en bas, bifurque tout de suite vers la moitié droite du labyrinthe : le chemin remonte jusqu'à l'une des lettres situées en haut à droite !"
       ]
@@ -65,8 +70,8 @@ window.JEU_DE_PISTE_CONFIG = {
         "Énigme facile : mettre la réponse de « Les bons comptes… » dans la case 4."
       ],
       indices: [
-        "Commence par la 1re égalité (❤️ = 4) pour trouver la valeur du trèfle 🍀, puis déduis la baguette (4e ligne), le cochon 🐷 (3e ligne) et enfin l'étoile ⭐ (2e ligne).",
-        "Une fois l'étoile ⭐ trouvée, calcule la dernière ligne (💧 = ⭐ - ❤️). Garde aussi précieusement les valeurs de tous les symboles pour la suite du jeu !",
+        "Commence par la 1re égalité (❤️ = 4) pour trouver la valeur du trèfle 🍀, puis déduis la baguette 🪄 (4e ligne), l'ours 🐻 (3e ligne) et enfin le canard 🐤 (2e ligne).",
+        "Une fois le canard 🐤 trouvé, calcule la dernière ligne (💧 = 🐤 - ❤️). Garde aussi précieusement les valeurs de tous les symboles pour la suite du jeu !",
         "Pour la « traduction à Jules César », demande-toi avec quelle lettre les Romains écrivaient le chiffre trouvé !"
       ]
     },
@@ -113,8 +118,8 @@ window.JEU_DE_PISTE_CONFIG = {
         "Énigme facile : mettre la réponse de « Alphabet international… » dans la case 3."
       ],
       indices: [
-        "Ne garde d'abord que les mots de l'alphabet phonétique qui sont aussi de vrais prénoms (Charlie, Juliet, Mike, Oscar, Romeo, Victor…).",
-        "Retire le célèbre couple d'amoureux de Shakespeare, puis le prénom lié à la chocolaterie de Willy Wonka (ainsi que toute danse éventuelle).",
+        "Ne garde d'abord que les mots de l'alphabet phonétique qui sont aussi de vrais prénoms (Charlie, Juliet, Mike, Oscar, Romeo, Victor, Tango).",
+        "Retire le célèbre couple d'amoureux de Shakespeare, puis le prénom lié à la chocolaterie de Willy Wonka ainsi que toute danse éventuelle.",
         "Parmi les prénoms restants, lequel désigne aussi la célèbre statuette dorée remise aux acteurs de cinéma à Hollywood ? Garde sa première lettre !"
       ]
     },

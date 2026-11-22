@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Indices — Jeu de Piste | Festival du Jeu de Seysses 2026</title>
-  <link rel="stylesheet" href="style.css?v=20261122-4" />
+  <link rel="stylesheet" href="style.css?v=20261122-7" />
 </head>
 <body>
   <main class="container">
@@ -72,12 +72,12 @@
         <div class="easy-grid-block">
           <h2 class="booklet-col-title">Énigme facile</h2>
           <ul class="booklet-mapping-list">
-            <li>réponse, <strong>le bon chemin</strong> … mettre dans <strong>case 7</strong></li>
-            <li>réponse, <strong>les paires</strong> … mettre dans <strong>case 1 et 6</strong></li>
-            <li>réponse, <strong>le point commun</strong> … mettre dans <strong>case 5</strong></li>
-            <li>réponse, <strong>alphabet international</strong> … mettre dans <strong>case 3</strong></li>
-            <li>réponse, <strong>les bons comptes</strong> … mettre dans <strong>case 4</strong></li>
-            <li>réponse, <strong>alphanumérique</strong> … mettre dans <strong>case 2</strong></li>
+            <li> <strong>le bon chemin</strong> … mettre la réponse dans <strong>case 7</strong></li>
+            <li> <strong>les paires</strong> … mettre la réponse dans <strong>case 1 et 6</strong></li>
+            <li> <strong>le point commun</strong> … mettre la réponse dans <strong>case 5</strong></li>
+            <li> <strong>alphabet international</strong> … mettre la réponse dans <strong>case 3</strong></li>
+            <li> <strong>les bons comptes</strong> … mettre la réponse dans <strong>case 4</strong></li>
+            <li> <strong>alphanumérique</strong> … mettre la réponse dans <strong>case 2</strong></li>
           </ul>
 
           <div class="easy-grid-label">
@@ -130,6 +130,7 @@
       <p class="bonus-finale-question" id="bonus-question">
         Quel est le personnage du monde ludique qui se cache dans cette énigme mystère ?
       </p>
+      <div class="hints-stack bonus-hints-stack" id="bonus-hints"></div>
     </section>
 
     <footer class="footer-actions">
@@ -192,8 +193,8 @@
     </div>
   </div>
 
-  <script src="indices.js?v=20261122-4"></script>
-  <script src="qrcode-lib.js?v=20261122-4"></script>
+  <script src="indices.js?v=20261122-7"></script>
+  <script src="qrcode-lib.js?v=20261122-7"></script>
   <script>
     (function () {
       const STORAGE_KEY = "seysses2026_indices_state_v1";
@@ -821,6 +822,79 @@
         });
       }
 
+      function renderBonusHints() {
+        const bonusContainer = document.getElementById("bonus-hints");
+        if (!bonusContainer) return;
+        bonusContainer.innerHTML = "";
+        const bonusList = config.indicesBonus || [];
+        if (!bonusList.length) return;
+
+        const bonusLevelLabels = [
+          "Indice 1 • Coup de pouce",
+          "Indice 2 • Gros indice",
+          "Réponse du Bonus"
+        ];
+        const bonusBtnLabels = [
+          "Débloquer l'indice 1",
+          "Débloquer l'indice 2",
+          "Voir la réponse du Bonus"
+        ];
+        const revealed = getRevealedCount("bonus");
+
+        bonusList.slice(0, 3).forEach((texte, idx) => {
+          const levelNum = idx + 1;
+          const isRevealed = revealed >= levelNum;
+          const canUnlock = revealed === idx;
+
+          const slot = document.createElement("div");
+          slot.className = "hint-slot level-" + levelNum + (isRevealed ? " revealed" : "");
+
+          const topRow = document.createElement("div");
+          topRow.className = "hint-top";
+
+          const badge = document.createElement("span");
+          badge.className = "level-badge";
+          badge.textContent = bonusLevelLabels[idx] || ("Indice " + levelNum);
+          topRow.appendChild(badge);
+
+          if (!isRevealed) {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "btn-reveal";
+            btn.disabled = !canUnlock;
+            btn.textContent = canUnlock
+              ? bonusBtnLabels[idx]
+              : "🔒 Débloque d'abord l'indice " + idx;
+            btn.addEventListener("click", () => {
+              setRevealedCount("bonus", levelNum);
+              renderBonusHints();
+            });
+            topRow.appendChild(btn);
+          } else if (revealed === levelNum) {
+            const hideBtn = document.createElement("button");
+            hideBtn.type = "button";
+            hideBtn.className = "btn-hide-hint";
+            hideBtn.textContent = "Masquer";
+            hideBtn.addEventListener("click", () => {
+              setRevealedCount("bonus", levelNum - 1);
+              renderBonusHints();
+            });
+            topRow.appendChild(hideBtn);
+          }
+
+          slot.appendChild(topRow);
+
+          if (isRevealed) {
+            const p = document.createElement("p");
+            p.className = "hint-text";
+            p.textContent = texte;
+            slot.appendChild(p);
+          }
+
+          bonusContainer.appendChild(slot);
+        });
+      }
+
       document.getElementById("btn-reset-letters").addEventListener("click", () => {
         if (isJailed()) {
           window.alert("🚔 Hop là ! Attends la fin de la pénalité avant de remettre les lettres à zéro.");
@@ -858,12 +932,14 @@
         renderEasyGrid();
         renderMysteryGrid();
         render();
+        renderBonusHints();
       });
 
       syncJailUi();
       renderEasyGrid();
       renderMysteryGrid();
       render();
+      renderBonusHints();
     })();
   </script>
 </body>
