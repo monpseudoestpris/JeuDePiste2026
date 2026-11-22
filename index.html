@@ -163,6 +163,35 @@
     </div>
   </div>
 
+  <!-- Modale Prison Monopoly avec barreaux par-dessus l'écran -->
+  <div class="jail-modal" id="jail-modal" hidden role="dialog" aria-modal="true" aria-labelledby="jail-modal-title">
+    <div class="jail-bars-overlay" aria-hidden="true">
+      <div class="jail-crossbar top"></div>
+      <div class="jail-bars-row">
+        <span class="jail-bar"></span>
+        <span class="jail-bar"></span>
+        <span class="jail-bar"></span>
+        <span class="jail-bar"></span>
+        <span class="jail-bar"></span>
+        <span class="jail-bar"></span>
+        <span class="jail-bar"></span>
+      </div>
+      <div class="jail-crossbar bottom"></div>
+    </div>
+
+    <div class="jail-modal-card">
+      <div class="jail-modal-badge">🚔 ALLEZ EN PRISON !</div>
+      <h2 class="jail-modal-title" id="jail-modal-title">Pas de lettres au hasard !</h2>
+      <p class="jail-modal-text">
+        Tu as tenté plusieurs mauvaises lettres de suite… Résous l'énigme sans passer par la case triche !
+      </p>
+      <div class="jail-countdown-box">
+        <span class="jail-countdown-label">Libération dans</span>
+        <strong class="jail-countdown-time" id="jail-timer">0:30</strong>
+      </div>
+    </div>
+  </div>
+
   <script src="indices.js"></script>
   <script src="qrcode-lib.js"></script>
   <script>
@@ -170,6 +199,7 @@
       const STORAGE_KEY = "seysses2026_indices_state_v1";
       const GRID_STORAGE_KEY = "seysses2026_easy_grid_v1";
       const MYSTERY_STORAGE_KEY = "seysses2026_mystery_grid_v1";
+      const ANTICHEAT_STORAGE_KEY = "seysses2026_anticheat_v1";
       const config = window.JEU_DE_PISTE_CONFIG;
       const targetWord = normalizeLetter(config.motEnigmeFacile || "ETOILES");
       const mysteryWord = normalizeLetter(config.motEnigmeMystere || "SEYSSES");
@@ -180,6 +210,8 @@
       const gridCompleteEl = document.getElementById("easy-grid-complete");
       const mysteryGridEl = document.getElementById("mystery-grid");
       const mysteryCompleteEl = document.getElementById("mystery-grid-complete");
+      const jailAlertEl = document.getElementById("jail-modal");
+      const jailTimerEl = document.getElementById("jail-timer");
 
       // Éléments Lightbox plein écran
       const lightboxEl = document.getElementById("svg-lightbox");
@@ -307,6 +339,18 @@
         mysteryState = mysteryState.map((ch) => normalizeLetter(ch).slice(-1));
       }
 
+      let antiCheat = readPersisted(ANTICHEAT_STORAGE_KEY);
+      if (!antiCheat || typeof antiCheat !== "object") {
+        antiCheat = { lockUntil: 0, jailCount: 0, wrongByCell: {} };
+      } else {
+        antiCheat.lockUntil = Number(antiCheat.lockUntil || 0);
+        antiCheat.jailCount = Number(antiCheat.jailCount || 0);
+        if (!antiCheat.wrongByCell || typeof antiCheat.wrongByCell !== "object") {
+          antiCheat.wrongByCell = {};
+        }
+      }
+
+      let jailIntervalId = null;
       let openCardId = null;
 
       function saveState() {
@@ -321,6 +365,81 @@
         writePersisted(MYSTERY_STORAGE_KEY, mysteryState);
       }
 
+      function saveAntiCheat() {
+        writePersisted(ANTICHEAT_STORAGE_KEY, antiCheat);
+      }
+
+      function isJailed() {
+        return antiCheat.lockUntil > Date.now();
+      }
+
+      function formatSeconds(totalSec) {
+        const m = Math.floor(totalSec / 60);
+        const s = totalSec % 60;
+        return m + ":" + (s < 10 ? "0" + s : String(s));
+      }
+
+      function syncJailUi() {
+        if (!isJailed()) {
+          if (antiCheat.lockUntil !== 0) {
+            antiCheat.lockUntil = 0;
+            saveAntiCheat();
+          }
+          jailAlertEl.hidden = true;
+          if (lightboxEl.hidden) {
+            document.body.style.overflow = "";
+          }
+          if (jailIntervalId) {
+            clearInterval(jailIntervalId);
+            jailIntervalId = null;
+            renderEasyGrid();
+            renderMysteryGrid();
+          }
+          return;
+        }
+
+        const remainingSec = Math.max(1, Math.ceil((antiCheat.lockUntil - Date.now()) / 1000));
+        jailTimerEl.textContent = formatSeconds(remainingSec);
+        jailAlertEl.hidden = false;
+        document.body.style.overflow = "hidden";
+
+        if (!jailIntervalId) {
+          jailIntervalId = setInterval(syncJailUi, 500);
+        }
+      }
+
+      function triggerJail(cellKey) {
+        antiCheat.jailCount = (antiCheat.jailCount || 0) + 1;
+        // 30 s, puis 1 min, 2 min, 4 min max
+        const durationSec = 30 * Math.pow(2, Math.min(3, antiCheat.jailCount - 1));
+        antiCheat.lockUntil = Date.now() + durationSec * 1000;
+        antiCheat.wrongByCell[cellKey] = 0;
+        saveAntiCheat();
+
+        if (document.activeElement && typeof document.activeElement.blur === "function") {
+          document.activeElement.blur();
+        }
+        syncJailUi();
+        renderEasyGrid();
+        renderMysteryGrid();
+      }
+
+      function handleLetterAttempt(cellKey, prevVal, newVal, expectedVal) {
+        if (!newVal || newVal === prevVal) return false;
+        if (newVal === expectedVal) {
+          antiCheat.wrongByCell[cellKey] = 0;
+          saveAntiCheat();
+          return false;
+        }
+        antiCheat.wrongByCell[cellKey] = (antiCheat.wrongByCell[cellKey] || 0) + 1;
+        if (antiCheat.wrongByCell[cellKey] >= 3) {
+          triggerJail(cellKey);
+          return true;
+        }
+        saveAntiCheat();
+        return false;
+      }
+
       function isCellCorrect(index) {
         return Boolean(gridState[index]) && gridState[index] === targetWord[index];
       }
@@ -329,10 +448,16 @@
         return Boolean(mysteryState[index]) && mysteryState[index] === mysteryWord[index];
       }
 
-      function updateCellVisual(cell, numEl, index) {
+      function updateCellVisual(cell, numEl, inp, index) {
+        const val = gridState[index];
         const correct = isCellCorrect(index);
+        const jailed = isJailed() && !correct;
         cell.classList.toggle("is-correct", correct);
-        numEl.textContent = correct ? (index + 1) + " ✓" : String(index + 1);
+        cell.classList.toggle("is-wrong", Boolean(val) && !correct);
+        cell.classList.toggle("is-jailed", jailed);
+        numEl.textContent = correct ? (index + 1) + " ✓" : (jailed ? (index + 1) + " 🔒" : String(index + 1));
+        inp.readOnly = correct;
+        inp.disabled = jailed;
       }
 
       function updateCompleteBanner() {
@@ -360,16 +485,28 @@
           inp.setAttribute("aria-label", "Case " + (i + 1));
           inp.value = gridState[i] || "";
 
-          updateCellVisual(cell, num, i);
+          updateCellVisual(cell, num, inp, i);
 
-          inp.addEventListener("focus", () => inp.select());
+          inp.addEventListener("focus", () => {
+            if (!inp.readOnly && !inp.disabled) inp.select();
+          });
           inp.addEventListener("input", () => {
+            if (isJailed()) {
+              inp.value = gridState[i] || "";
+              return;
+            }
+            const prev = gridState[i] || "";
             const clean = normalizeLetter(inp.value);
-            gridState[i] = clean ? clean.slice(-1) : "";
-            inp.value = gridState[i];
-            updateCellVisual(cell, num, i);
-            updateCompleteBanner();
+            const nextVal = clean ? clean.slice(-1) : "";
+            gridState[i] = nextVal;
+            inp.value = nextVal;
             saveGrid();
+
+            const sentToJail = handleLetterAttempt("easy_" + i, prev, nextVal, targetWord[i]);
+            if (!sentToJail) {
+              updateCellVisual(cell, num, inp, i);
+              updateCompleteBanner();
+            }
           });
 
           cell.appendChild(num);
@@ -415,20 +552,39 @@
             inp.setAttribute("aria-label", "Lettre " + (i + 1) + " de l'énigme mystère");
             inp.value = mysteryState[i] || "";
 
-            const ok = isMysteryCellCorrect(i);
-            cell.classList.toggle("is-correct", ok);
-            num.textContent = ok ? (i + 1) + " ✓" : String(i + 1);
+            const refreshMysteryCell = () => {
+              const val = mysteryState[i];
+              const ok = isMysteryCellCorrect(i);
+              const jailed = isJailed() && !ok;
+              cell.classList.toggle("is-correct", ok);
+              cell.classList.toggle("is-wrong", Boolean(val) && !ok);
+              cell.classList.toggle("is-jailed", jailed);
+              num.textContent = ok ? (i + 1) + " ✓" : (jailed ? (i + 1) + " 🔒" : String(i + 1));
+              inp.readOnly = ok;
+              inp.disabled = jailed;
+            };
+            refreshMysteryCell();
 
-            inp.addEventListener("focus", () => inp.select());
+            inp.addEventListener("focus", () => {
+              if (!inp.readOnly && !inp.disabled) inp.select();
+            });
             inp.addEventListener("input", () => {
+              if (isJailed()) {
+                inp.value = mysteryState[i] || "";
+                return;
+              }
+              const prev = mysteryState[i] || "";
               const clean = normalizeLetter(inp.value);
-              mysteryState[i] = clean ? clean.slice(-1) : "";
-              inp.value = mysteryState[i];
-              const nowOk = isMysteryCellCorrect(i);
-              cell.classList.toggle("is-correct", nowOk);
-              num.textContent = nowOk ? (i + 1) + " ✓" : String(i + 1);
-              updateMysteryBanner();
+              const nextVal = clean ? clean.slice(-1) : "";
+              mysteryState[i] = nextVal;
+              inp.value = nextVal;
               saveMysteryGrid();
+
+              const sentToJail = handleLetterAttempt("mystery_" + i, prev, nextVal, mysteryWord[i]);
+              if (!sentToJail) {
+                refreshMysteryCell();
+                updateMysteryBanner();
+              }
             });
           }
 
@@ -651,32 +807,45 @@
       }
 
       document.getElementById("btn-reset-letters").addEventListener("click", () => {
+        if (isJailed()) {
+          window.alert("🚔 Hop là ! Attends la fin de la pénalité avant de remettre les lettres à zéro.");
+          return;
+        }
         if (!window.confirm("Remettre à zéro toutes les lettres saisies ?")) {
           return;
         }
         gridState = ["", "", "", "", "", "", ""];
         mysteryState = ["", "", "", "", "", ""];
+        antiCheat = { lockUntil: 0, jailCount: 0, wrongByCell: {} };
         saveGrid();
         saveMysteryGrid();
+        saveAntiCheat();
         renderEasyGrid();
         renderMysteryGrid();
       });
 
       document.getElementById("btn-reset-all").addEventListener("click", () => {
+        if (isJailed()) {
+          window.alert("🚔 Hop là ! Attends la fin de la pénalité avant de réinitialiser.");
+          return;
+        }
         if (!window.confirm("Effacer les lettres saisies et refermer tous les indices ?")) {
           return;
         }
         savedState = {};
         gridState = ["", "", "", "", "", "", ""];
         mysteryState = ["", "", "", "", "", ""];
+        antiCheat = { lockUntil: 0, jailCount: 0, wrongByCell: {} };
         saveState();
         saveGrid();
         saveMysteryGrid();
+        saveAntiCheat();
         renderEasyGrid();
         renderMysteryGrid();
         render();
       });
 
+      syncJailUi();
       renderEasyGrid();
       renderMysteryGrid();
       render();

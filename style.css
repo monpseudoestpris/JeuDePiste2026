@@ -728,6 +728,187 @@ body {
   background: rgba(255, 248, 227, 0.7);
 }
 
+/* Modale Prison Monopoly plein écran avec barreaux métalliques */
+.jail-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1500;
+  background: rgba(5, 14, 32, 0.84);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.jail-modal[hidden] {
+  display: none !important;
+}
+
+/* Grille de barreaux métalliques en premier plan */
+.jail-bars-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  animation: slamBars 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes slamBars {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.jail-crossbar {
+  height: 26px;
+  width: 100%;
+  background: linear-gradient(180deg, #64748b 0%, #334155 45%, #0f172a 100%);
+  border-top: 2px solid #94a3b8;
+  border-bottom: 2px solid #020617;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55);
+}
+
+.jail-crossbar.top {
+  margin-top: 8vh;
+}
+
+.jail-crossbar.bottom {
+  margin-bottom: 8vh;
+}
+
+.jail-bars-row {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: stretch;
+  padding: 0 4vw;
+}
+
+.jail-bar {
+  width: clamp(12px, 2.8vw, 20px);
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    #0f172a 0%,
+    #475569 24%,
+    #e2e8f0 46%,
+    #94a3b8 62%,
+    #1e293b 88%,
+    #020617 100%
+  );
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.55), -2px 0 6px rgba(0, 0, 0, 0.35);
+}
+
+/* Pancarte centrale lisible derrière / entre les barreaux */
+.jail-modal-card {
+  position: relative;
+  z-index: 3;
+  max-width: 420px;
+  width: 100%;
+  padding: 26px 22px;
+  border-radius: 22px;
+  background: linear-gradient(160deg, #10254c 0%, #071329 100%);
+  border: 3px solid #f97316;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.75);
+  text-align: center;
+  color: #ffffff;
+}
+
+.jail-modal-badge {
+  display: inline-block;
+  padding: 6px 18px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fb923c 0%, #ea580c 100%);
+  color: #ffffff;
+  font-size: 0.96rem;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.45);
+}
+
+.jail-modal-title {
+  margin: 0 0 8px;
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: var(--gold-light);
+}
+
+.jail-modal-text {
+  margin: 0 0 18px;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: #e2e8f0;
+}
+
+.jail-countdown-box {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 26px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.48);
+  border: 2px solid var(--gold);
+}
+
+.jail-countdown-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #cbd5e1;
+}
+
+.jail-countdown-time {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 2.1rem;
+  font-weight: 900;
+  line-height: 1.15;
+  color: #fde047;
+}
+
+/* Case erronée (1er essai) et case verrouillée en prison */
+.easy-cell.is-wrong {
+  background: #fff1f2;
+  border-color: #fb7185;
+}
+
+.easy-cell.is-wrong .easy-cell-input {
+  color: #9f1239;
+}
+
+.easy-cell.is-jailed {
+  background: repeating-linear-gradient(
+    90deg,
+    #e2e8f0,
+    #e2e8f0 6px,
+    #cbd5e1 6px,
+    #cbd5e1 9px
+  );
+  border-color: #64748b;
+  opacity: 0.85;
+}
+
+.easy-cell.is-jailed .easy-cell-num {
+  background: #475569;
+  color: #f8fafc;
+}
+
+.easy-cell.is-jailed .easy-cell-input {
+  color: #475569;
+  cursor: not-allowed;
+}
+
 /* Case validée en vert quand la bonne lettre est saisie */
 .easy-cell.is-correct {
   background: #d1fae5;
