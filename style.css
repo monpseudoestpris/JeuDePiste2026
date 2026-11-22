@@ -518,21 +518,59 @@ body {
 }
 
 .booklet-tips-list {
-  margin: 0 0 14px;
+  margin: 12px 0 0;
   padding-left: 18px;
   color: var(--ink);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
 .booklet-tips-list li + li {
-  margin-top: 5px;
+  margin-top: 4px;
+}
+
+.booklet-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.booklet-col-title {
+  margin: 0 0 8px;
+  font-size: 0.98rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--gold-light);
+  text-align: center;
+  border-bottom: 1px solid rgba(250, 224, 158, 0.28);
+  padding-bottom: 6px;
+}
+
+.booklet-mapping-list {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  font-size: 0.84rem;
+  line-height: 1.48;
+  color: #e8f4ff;
+}
+
+.booklet-mapping-list li + li {
+  margin-top: 4px;
+}
+
+.booklet-mapping-list strong {
+  color: var(--gold-light);
 }
 
 .easy-grid-block {
   background: linear-gradient(180deg, #102c5e 0%, #091b3c 100%);
   border-radius: var(--radius-md);
-  padding: 12px 12px 14px;
+  padding: 13px 13px 15px;
   color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .easy-grid-label {
@@ -1087,6 +1125,41 @@ body {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-3px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Grand bloc BONUS en fin de page */
+.bonus-finale-card {
+  margin-top: 26px;
+  padding: 26px 22px;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, #102c5e 0%, #071836 100%);
+  border: 3px solid var(--gold);
+  box-shadow: var(--shadow-poster), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  text-align: center;
+  color: #ffffff;
+}
+
+.bonus-finale-badge {
+  display: inline-block;
+  padding: 6px 20px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--gold-light) 0%, var(--gold) 65%, var(--gold-deep) 100%);
+  color: var(--navy-deep);
+  font-size: 1.15rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.bonus-finale-question {
+  margin: 0 auto;
+  max-width: 540px;
+  font-size: clamp(1.2rem, 4.2vw, 1.5rem);
+  font-weight: 800;
+  line-height: 1.35;
+  color: #ffffff;
 }
 
 /* ==========================================================================

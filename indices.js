@@ -13,11 +13,11 @@ window.JEU_DE_PISTE_CONFIG = {
   sousTitre: "Jeu de Piste — Coups de pouce & Indices",
   urlSiteParDefaut: "https://monpseudoestpris.github.io/JeuDePiste2026/",
   motEnigmeFacile: "ETOILES",
+  motEnigmeMystere: "SEYSSES",
+  questionBonus: "Quel est le personnage du monde ludique qui se cache dans cette énigme mystère ?",
 
   // Conseils généraux issus de la page 1 du livret créateur
   conseilsLivret: [
-    "📸 Si vous comptez faire l'énigme mystère, pensez à prendre les énigmes en photo.",
-    "⚠️ Attention, ce jeu n'attribue pas de félicitation…",
     "🧐 Le contenu des énigmes ne doit rien au hasard, soyez donc vigilant !"
   ],
 
@@ -30,8 +30,7 @@ window.JEU_DE_PISTE_CONFIG = {
       image: "public/JeuDePiste2026_1.svg",
       description: "Quelle lettre te mène vers la sortie ?",
       aideLivret: [
-        "Énigme facile : mettre la réponse de « Le bon chemin… » dans la case 7.",
-        "Rappel : pensez à prendre la feuille d'énigme en photo si vous comptez faire l'énigme mystère !"
+        "Énigme facile : mettre la réponse de « Le bon chemin… » dans la case 7."
       ],
       indices: [
         "Méfie-toi des apparences : le grand couloir central qui semble filer tout droit est un piège (regarde bien tout en haut, il est fermé !).",
@@ -47,8 +46,7 @@ window.JEU_DE_PISTE_CONFIG = {
       image: "public/JeuDePiste2026_2.svg",
       description: "Si E = 5 ; T = 20 ; O = 15 alors…",
       aideLivret: [
-        "Énigme facile : mettre la réponse de « Alphanumérique… » dans la case 2.",
-        "Rappel : pensez à prendre la feuille d'énigme en photo si vous comptez faire l'énigme mystère !"
+        "Énigme facile : mettre la réponse de « Alphanumérique… » dans la case 2."
       ],
       indices: [
         "Chaque nombre correspond à la position de la lettre dans l'alphabet (A = 1, B = 2, C = 3… jusqu'à Z = 26). Décode les 7 mots.",
@@ -64,8 +62,7 @@ window.JEU_DE_PISTE_CONFIG = {
       image: "public/JeuDePiste2026_3.svg",
       description: "Trouve la valeur de la goutte d'eau puis fais-en la traduction « à Jules César ».",
       aideLivret: [
-        "Énigme facile : mettre la réponse de « Les bons comptes… » dans la case 4.",
-        "Rappel : prenez bien cette énigme en photo, aucun détail n'est laissé au hasard pour l'énigme mystère !"
+        "Énigme facile : mettre la réponse de « Les bons comptes… » dans la case 4."
       ],
       indices: [
         "Commence par la 1re égalité (❤️ = 4) pour trouver la valeur du trèfle 🍀, puis déduis la baguette (4e ligne), le cochon 🐷 (3e ligne) et enfin l'étoile ⭐ (2e ligne).",
@@ -81,8 +78,7 @@ window.JEU_DE_PISTE_CONFIG = {
       image: "public/JeuDePiste2026_4.svg",
       description: "Trouve la paire d'objets qui te permettra de conserver 2 lettres identiques.",
       aideLivret: [
-        "Énigme facile : mettre la réponse de « Les paires… » dans les cases 1 et 6.",
-        "Rappel : pensez à prendre la feuille d'énigme en photo si vous comptez faire l'énigme mystère !"
+        "Énigme facile : mettre la réponse de « Les paires… » dans les cases 1 et 6."
       ],
       indices: [
         "Compte chaque famille d'objets sur la table et élimine tous ceux qui apparaissent en 1, 3, 4 ou 5 exemplaires (allumettes, cuillères, clés, bougies, pommes de pin, pièces…) pour ne garder que les duos.",
@@ -98,8 +94,7 @@ window.JEU_DE_PISTE_CONFIG = {
       image: "public/JeuDePiste2026_5.svg",
       description: "Icare, Pégase, Libellule, Cupidon, Fées, Dragons…",
       aideLivret: [
-        "Énigme facile : mettre la réponse de « Le point commun… » dans la case 5.",
-        "Rappel : pensez à prendre la feuille d'énigme en photo si vous comptez faire l'énigme mystère !"
+        "Énigme facile : mettre la réponse de « Le point commun… » dans la case 5."
       ],
       indices: [
         "Quel élément anatomique (ou fabriqué, dans le cas d'Icare) ont-ils tous en commun et qui leur permet de voler ?",
@@ -115,8 +110,7 @@ window.JEU_DE_PISTE_CONFIG = {
       image: "public/JeuDePiste2026_6.svg",
       description: "Élimine les mots de la grille bleue en suivant les étapes a) à e).",
       aideLivret: [
-        "Énigme facile : mettre la réponse de « Alphabet international… » dans la case 3.",
-        "Rappel : pensez à prendre cette feuille en photo, elle vous reservira pour l'énigme mystère !"
+        "Énigme facile : mettre la réponse de « Alphabet international… » dans la case 3."
       ],
       indices: [
         "Ne garde d'abord que les mots de l'alphabet phonétique qui sont aussi de vrais prénoms (Charlie, Juliet, Mike, Oscar, Romeo, Victor…).",
@@ -135,13 +129,7 @@ window.JEU_DE_PISTE_CONFIG = {
       icone: "🔎",
       image: "public/JeuDePiste2026_7.svg",
       description: "Combine toutes tes trouvailles précédentes pour décoder les grilles finales !",
-      aideLivret: [
-        "Quelle est la réponse à l'énigme facile (cases 1 à 7) ?",
-        "Grâce à cette réponse, quel mot peut-on trouver ? (Rappel : « Attention, ce jeu n'attribue pas de félicitation… »)",
-        "Il vous faut 2 éléments pour prélever les lettres.",
-        "Quelle est la réponse à l'énigme mystère ?  _ _ _ _ _ _ S",
-        "🎁 BONUS : Quel est le personnage du monde ludique qui se cache dans cette énigme mystère ?"
-      ],
+      aideLivret: [],
       indices: [
         "Remets dans l'ordre les 7 lettres récoltées aux énigmes 1 à 6 pour former un mot qui brille dans le ciel la nuit, puis repère cette forme géométrique sur tes feuilles d'énigmes…",
         "Relève les nombres inscrits dans les étoiles sur les feuilles précédentes et remplace chaque nombre par sa lettre (A = 1, B = 2…) : le mot obtenu renvoie à un code de l'Alphabet international (énigme 6) qui t'indique quelle ligne lire !",

@@ -50,24 +50,55 @@
 
       <div class="quest-pill">🔎 Jeu de Piste • Énigmes &amp; Indices</div>
       <p class="hero-sub" id="festival-subtitle">
-        Consulte chaque énigme, retrouve les aides du livret, et débloque jusqu'à 3 niveaux d'indices si tu es coincé !
+        Consulte chaque énigme, remplis ton livret interactif, et débloque jusqu'à 3 niveaux d'indices si tu es coincé !
       </p>
     </header>
 
-    <!-- Bloc Conseils pratiques du livret + Grille mémo 7 cases (Énigme facile) -->
-    <section class="booklet-panel" aria-label="Conseils pratiques du livret">
-      <h2 class="booklet-panel-title">📖 Conseil pratique avant de commencer</h2>
-      <ul class="booklet-tips-list" id="booklet-tips"></ul>
+    <!-- Bloc Livret complet au début : Énigme facile au-dessus de Énigme mystère -->
+    <section class="booklet-panel" aria-label="Livret du jeu de piste">
+      <div class="booklet-stack">
+        <!-- 1. ÉNIGME FACILE -->
+        <div class="easy-grid-block">
+          <h2 class="booklet-col-title">Énigme facile</h2>
+          <ul class="booklet-mapping-list">
+            <li>réponse, <strong>le bon chemin</strong> … mettre dans <strong>case 7</strong></li>
+            <li>réponse, <strong>les paires</strong> … mettre dans <strong>case 1 et 6</strong></li>
+            <li>réponse, <strong>le point commun</strong> … mettre dans <strong>case 5</strong></li>
+            <li>réponse, <strong>alphabet international</strong> … mettre dans <strong>case 3</strong></li>
+            <li>réponse, <strong>les bons comptes</strong> … mettre dans <strong>case 4</strong></li>
+            <li>réponse, <strong>alphanumérique</strong> … mettre dans <strong>case 2</strong></li>
+          </ul>
 
-      <div class="easy-grid-block">
-        <div class="easy-grid-label">
-          Grille « Énigme facile » — entre tes lettres dans les cases 1 à 7 (la case devient verte si la lettre est bonne !) :
+          <div class="easy-grid-label">
+            Cases 1 à 7 (la case devient verte quand c'est la bonne lettre) :
+          </div>
+          <div class="easy-grid" id="easy-grid" role="group" aria-label="Grille de 7 lettres de l'énigme facile"></div>
+          <div class="easy-grid-complete" id="easy-grid-complete" hidden>
+            ✨ Énigme facile trouvée ! Passe maintenant à l'Énigme mystère juste en dessous…
+          </div>
         </div>
-        <div class="easy-grid" id="easy-grid" role="group" aria-label="Grille de 7 lettres de l'énigme facile"></div>
-        <div class="easy-grid-complete" id="easy-grid-complete" hidden>
-          ✨ Bravo, l'Énigme facile est complète ! Regarde bien cette forme sur tes feuilles pour l'Énigme mystère…
+
+        <!-- 2. ÉNIGME MYSTÈRE (juste en dessous) -->
+        <div class="easy-grid-block mystery-col-block">
+          <h2 class="booklet-col-title">Énigme mystère</h2>
+          <ul class="booklet-mapping-list">
+            <li>- Quelle est la réponse à l’énigme facile ?</li>
+            <li>- Grâce à cette réponse quel mot peut-on trouver ?</li>
+            <li>- Il vous faut 2 éléments pour prélever les lettres</li>
+            <li>- Quelle est la réponse à l'énigme mystère ?</li>
+          </ul>
+
+          <div class="easy-grid-label">
+            Réponse à l'énigme mystère (<code>_ _ _ _ _ _ S</code>) :
+          </div>
+          <div class="easy-grid" id="mystery-grid" role="group" aria-label="Réponse de l'énigme mystère"></div>
+          <div class="easy-grid-complete" id="mystery-grid-complete" hidden>
+            🎉 Félicitations, tu as résolu l'Énigme mystère !
+          </div>
         </div>
       </div>
+
+      <ul class="booklet-tips-list" id="booklet-tips"></ul>
     </section>
 
     <section class="intro-banner" aria-label="Mode d'emploi">
@@ -76,9 +107,17 @@
 
     <section class="enigma-list" id="enigma-list" aria-label="Liste des 7 énigmes"></section>
 
+    <!-- Grand encadré BONUS à la fin -->
+    <section class="bonus-finale-card" aria-label="Question Bonus">
+      <div class="bonus-finale-badge">🎁 BONUS</div>
+      <p class="bonus-finale-question" id="bonus-question">
+        Quel est le personnage du monde ludique qui se cache dans cette énigme mystère ?
+      </p>
+    </section>
+
     <footer class="footer-actions">
       <button type="button" class="btn-secondary" id="btn-reset-all">
-        🔄 Réinitialiser les indices et la grille
+        🔄 Réinitialiser les indices et les lettres saisies
       </button>
 
       <div class="festival-footer-box">
@@ -112,12 +151,17 @@
     (function () {
       const STORAGE_KEY = "seysses2026_indices_state_v1";
       const GRID_STORAGE_KEY = "seysses2026_easy_grid_v1";
+      const MYSTERY_STORAGE_KEY = "seysses2026_mystery_grid_v1";
       const config = window.JEU_DE_PISTE_CONFIG;
       const targetWord = normalizeLetter(config.motEnigmeFacile || "ETOILES");
+      const mysteryWord = normalizeLetter(config.motEnigmeMystere || "SEYSSES");
+
       const listEl = document.getElementById("enigma-list");
       const tipsEl = document.getElementById("booklet-tips");
       const gridEl = document.getElementById("easy-grid");
       const gridCompleteEl = document.getElementById("easy-grid-complete");
+      const mysteryGridEl = document.getElementById("mystery-grid");
+      const mysteryCompleteEl = document.getElementById("mystery-grid-complete");
 
       // Éléments Lightbox plein écran
       const lightboxEl = document.getElementById("svg-lightbox");
@@ -207,6 +251,10 @@
         tipsEl.appendChild(li);
       });
 
+      if (config.questionBonus) {
+        document.getElementById("bonus-question").textContent = config.questionBonus;
+      }
+
       let savedState = readPersisted(STORAGE_KEY);
       if (!savedState || typeof savedState !== "object") {
         savedState = {};
@@ -219,6 +267,13 @@
         gridState = gridState.map((ch) => normalizeLetter(ch).slice(-1));
       }
 
+      let mysteryState = readPersisted(MYSTERY_STORAGE_KEY);
+      if (!Array.isArray(mysteryState) || mysteryState.length !== 6) {
+        mysteryState = ["", "", "", "", "", ""];
+      } else {
+        mysteryState = mysteryState.map((ch) => normalizeLetter(ch).slice(-1));
+      }
+
       let openCardId = null;
 
       function saveState() {
@@ -229,8 +284,16 @@
         writePersisted(GRID_STORAGE_KEY, gridState);
       }
 
+      function saveMysteryGrid() {
+        writePersisted(MYSTERY_STORAGE_KEY, mysteryState);
+      }
+
       function isCellCorrect(index) {
         return Boolean(gridState[index]) && gridState[index] === targetWord[index];
+      }
+
+      function isMysteryCellCorrect(index) {
+        return Boolean(mysteryState[index]) && mysteryState[index] === mysteryWord[index];
       }
 
       function updateCellVisual(cell, numEl, index) {
@@ -266,10 +329,7 @@
 
           updateCellVisual(cell, num, i);
 
-          inp.addEventListener("focus", () => {
-            inp.select();
-          });
-
+          inp.addEventListener("focus", () => inp.select());
           inp.addEventListener("input", () => {
             const clean = normalizeLetter(inp.value);
             gridState[i] = clean ? clean.slice(-1) : "";
@@ -284,6 +344,66 @@
           gridEl.appendChild(cell);
         }
         updateCompleteBanner();
+      }
+
+      function updateMysteryBanner() {
+        const allGood = mysteryState.every((_, idx) => isMysteryCellCorrect(idx));
+        mysteryCompleteEl.hidden = !allGood;
+      }
+
+      function renderMysteryGrid() {
+        mysteryGridEl.innerHTML = "";
+        for (let i = 0; i < 7; i++) {
+          const cell = document.createElement("div");
+          cell.className = "easy-cell";
+
+          const num = document.createElement("span");
+          num.className = "easy-cell-num";
+
+          const inp = document.createElement("input");
+          inp.type = "text";
+          inp.className = "easy-cell-input";
+
+          if (i === 6) {
+            // 7e lettre "S" déjà donnée (_ _ _ _ _ _ S)
+            cell.classList.add("is-correct");
+            num.textContent = "7 ✓";
+            inp.value = mysteryWord[6] || "S";
+            inp.readOnly = true;
+            inp.tabIndex = -1;
+            inp.setAttribute("aria-label", "Lettre 7 déjà fournie : S");
+          } else {
+            inp.inputMode = "text";
+            inp.autocomplete = "off";
+            inp.autocapitalize = "characters";
+            inp.spellcheck = false;
+            inp.maxLength = 2;
+            inp.placeholder = "_";
+            inp.setAttribute("aria-label", "Lettre " + (i + 1) + " de l'énigme mystère");
+            inp.value = mysteryState[i] || "";
+
+            const ok = isMysteryCellCorrect(i);
+            cell.classList.toggle("is-correct", ok);
+            num.textContent = ok ? (i + 1) + " ✓" : String(i + 1);
+
+            inp.addEventListener("focus", () => inp.select());
+            inp.addEventListener("input", () => {
+              const clean = normalizeLetter(inp.value);
+              mysteryState[i] = clean ? clean.slice(-1) : "";
+              inp.value = mysteryState[i];
+              const nowOk = isMysteryCellCorrect(i);
+              cell.classList.toggle("is-correct", nowOk);
+              num.textContent = nowOk ? (i + 1) + " ✓" : String(i + 1);
+              updateMysteryBanner();
+              saveMysteryGrid();
+            });
+          }
+
+          cell.appendChild(num);
+          cell.appendChild(inp);
+          mysteryGridEl.appendChild(cell);
+        }
+        updateMysteryBanner();
       }
 
       function getRevealedCount(enigmaId) {
@@ -338,7 +458,6 @@
           pill.textContent = revealed + "/3";
           pill.title = revealed + " indice(s) débloqué(s) sur 3";
 
-          // Médaillon en haut à droite avec le symbole Monopoly officiel (moustache, canne, nœud papillon, chapeau, sac $, costume)
           const symbolBadge = document.createElement("div");
           symbolBadge.className = "monopoly-symbol-badge";
           if (enigme.symbole) {
@@ -504,13 +623,17 @@
         }
         savedState = {};
         gridState = ["", "", "", "", "", "", ""];
+        mysteryState = ["", "", "", "", "", ""];
         saveState();
         saveGrid();
+        saveMysteryGrid();
         renderEasyGrid();
+        renderMysteryGrid();
         render();
       });
 
       renderEasyGrid();
+      renderMysteryGrid();
       render();
     })();
   </script>
