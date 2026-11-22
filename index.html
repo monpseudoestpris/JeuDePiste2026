@@ -52,6 +52,17 @@
       <p class="hero-sub" id="festival-subtitle">
         Consulte chaque énigme, remplis ton livret interactif, et débloque jusqu'à 3 niveaux d'indices si tu es coincé !
       </p>
+
+      <!-- QR Code directement visible dans l'en-tête + bouton bien visible vers la page QR Code -->
+      <div class="hero-qr-box">
+        <a href="qrcode.html" class="hero-qr-thumb" id="hero-qr-thumb" title="Ouvrir la page QR Code en grand"></a>
+        <div class="hero-qr-info">
+          <div class="hero-qr-label">Partage ce site avec ton équipe :</div>
+          <a href="qrcode.html" class="hero-qr-btn">
+            📱 Ouvrir / Imprimer le QR Code
+          </a>
+        </div>
+      </div>
     </header>
 
     <!-- Bloc Livret complet au début : Énigme facile au-dessus de Énigme mystère -->
@@ -147,6 +158,7 @@
   </div>
 
   <script src="indices.js"></script>
+  <script src="qrcode-lib.js"></script>
   <script>
     (function () {
       const STORAGE_KEY = "seysses2026_indices_state_v1";
@@ -253,6 +265,21 @@
 
       if (config.questionBonus) {
         document.getElementById("bonus-question").textContent = config.questionBonus;
+      }
+
+      // Génération du QR Code directement dans l'en-tête
+      const heroQrEl = document.getElementById("hero-qr-thumb");
+      if (heroQrEl && window.SimpleQR) {
+        const isPublicWeb =
+          (location.protocol === "https:" || location.protocol === "http:") &&
+          location.hostname !== "localhost" &&
+          location.hostname !== "127.0.0.1";
+        const qrTargetUrl = isPublicWeb
+          ? new URL("index.html", location.href).href.replace(/index\.html$/, "")
+          : (config.urlSiteParDefaut || "https://monpseudoestpris.github.io/JeuDePiste2026/");
+        try {
+          heroQrEl.innerHTML = window.SimpleQR.toSvgString(qrTargetUrl, 3);
+        } catch (_) {}
       }
 
       let savedState = readPersisted(STORAGE_KEY);
