@@ -9,14 +9,55 @@
 <body>
   <main class="container">
     <header class="hero">
-      <div class="hero-badge" id="festival-title">🎲 Festival du Jeu de Seysses 2026</div>
-      <h1>Jeu de Piste</h1>
-      <p id="festival-subtitle">Besoin d'un coup de pouce ? Débloque les indices à ton rythme !</p>
+      <div class="corner-ribbon left" aria-hidden="true">7 Énigmes</div>
+      <div class="corner-ribbon right" aria-hidden="true">3 Indices</div>
+
+      <div class="edition-badge">
+        <span class="edition-num">10<sup>e</sup></span>
+        <span class="edition-word">Édition</span>
+      </div>
+
+      <h1 class="poster-main-title">Festival<br />du Jeu</h1>
+      <div class="poster-city">Seysses</div>
+
+      <div class="meeple-wrap" aria-hidden="true">
+        <svg class="meeple-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="meepleGoldLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ffe799" />
+              <stop offset="55%" stop-color="#f3be49" />
+              <stop offset="100%" stop-color="#cf8b22" />
+            </linearGradient>
+            <linearGradient id="meepleGoldRight" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#f7c852" />
+              <stop offset="100%" stop-color="#b97414" />
+            </linearGradient>
+          </defs>
+          <!-- Silhouette Meeple facettée façon affiche -->
+          <path
+            d="M60 10 C71 10 79 18 79 28 C79 33 76 37 73 40 L105 55 C111 58 112 66 106 70 L90 78 L99 104 C101 110 96 114 90 114 L69 114 L60 92 L51 114 L30 114 C24 114 19 110 21 104 L30 78 L14 70 C8 66 9 58 15 55 L47 40 C44 37 41 33 41 28 C41 18 49 10 60 10 Z"
+            fill="url(#meepleGoldLeft)"
+            stroke="#f9df94"
+            stroke-width="2.5"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M60 10 C71 10 79 18 79 28 C79 33 76 37 73 40 L105 55 C111 58 112 66 106 70 L90 78 L99 104 C101 110 96 114 90 114 L69 114 L60 92 Z"
+            fill="url(#meepleGoldRight)"
+            opacity="0.72"
+          />
+        </svg>
+      </div>
+
+      <div class="quest-pill">🔎 Jeu de Piste • Indices</div>
+      <p class="hero-sub" id="festival-subtitle">
+        Besoin d'un coup de pouce ? Débloque progressivement les 3 niveaux d'aide !
+      </p>
     </header>
 
     <section class="intro-banner" aria-label="Mode d'emploi">
-      <strong>Anti-spoiler :</strong> Sélectionne ton énigme ci-dessous. Chaque énigme propose
-      <strong>3 niveaux d'aide</strong> de plus en plus précis (le niveau 3 donne un très gros indice, sans dévoiler la réponse exacte).
+      <strong>Mode anti-spoiler :</strong> Choisis ton énigme ci-dessous. Les indices se débloquent dans l'ordre
+      (<strong>1 → 2 → 3</strong>) et même le 3<sup>e</sup> reste un gros coup de pouce sans te gâcher le plaisir de trouver !
     </section>
 
     <section class="enigma-list" id="enigma-list" aria-label="Liste des 7 énigmes"></section>
@@ -25,8 +66,13 @@
       <button type="button" class="btn-secondary" id="btn-reset-all">
         🔄 Masquer tous les indices ouverts
       </button>
-      <div class="footer-links">
-        <a href="qrcode.html">📱 Afficher / imprimer le QR Code du site</a>
+
+      <div class="festival-footer-box">
+        <div class="festival-footer-date">Samedi 28 Novembre 2026 • 10h - Minuit</div>
+        <div class="festival-footer-place">Salle des fêtes de Seysses • Comité Festif Seyssois</div>
+        <div class="footer-links">
+          <a href="qrcode.html">📱 Afficher / imprimer l'affiche QR Code du site</a>
+        </div>
       </div>
     </footer>
   </main>
@@ -47,10 +93,6 @@
         "Débloquer l'indice 2",
         "Débloquer l'indice 3 (gros indice)"
       ];
-
-      if (config.titreFestival) {
-        document.getElementById("festival-title").textContent = "🎲 " + config.titreFestival;
-      }
 
       let savedState = {};
       try {

@@ -1,109 +1,235 @@
 :root {
-  --bg: #fdf8ef;
-  --surface: #ffffff;
-  --surface-alt: #f6efe2;
-  --ink: #1a2238;
-  --ink-muted: #556078;
-  --primary: #274690;
-  --primary-hover: #1d356e;
-  --accent-gold: #f4a226;
-  --border: #e5dccb;
-  --shadow: 0 6px 20px rgba(26, 34, 56, 0.08);
+  --sky-light: #4cc2ff;
+  --sky-mid: #1a8be6;
+  --royal: #0b58b5;
+  --navy: #0b2248;
+  --navy-deep: #061530;
 
-  --lvl1-bg: #ecf9f2;
-  --lvl1-border: #8ad6ad;
-  --lvl1-badge: #1d7a4c;
+  --gold-light: #fae09e;
+  --gold: #e5b55f;
+  --gold-deep: #c48b31;
 
-  --lvl2-bg: #fff6e8;
-  --lvl2-border: #f5c372;
-  --lvl2-badge: #b35c00;
+  --surface: rgba(255, 255, 255, 0.96);
+  --surface-soft: #eef6ff;
+  --ink: #0b2248;
+  --ink-muted: #415a80;
+  --border-cyan: rgba(125, 211, 255, 0.55);
+  --border-card: rgba(15, 76, 160, 0.2);
 
-  --lvl3-bg: #fff0ed;
-  --lvl3-border: #f29d8f;
-  --lvl3-badge: #b82914;
+  --lvl1-bg: #ebfbf3;
+  --lvl1-border: #63cf99;
+  --lvl1-badge: #116b40;
 
-  --radius-lg: 18px;
+  --lvl2-bg: #fff7e6;
+  --lvl2-border: #f0b85a;
+  --lvl2-badge: #9e5600;
+
+  --lvl3-bg: #fff0ee;
+  --lvl3-border: #f09284;
+  --lvl3-badge: #a82210;
+
+  --radius-xl: 22px;
+  --radius-lg: 16px;
   --radius-md: 12px;
+  --shadow-poster: 0 12px 32px rgba(4, 20, 52, 0.32);
+  --shadow-card: 0 8px 22px rgba(5, 25, 64, 0.22);
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  min-height: 100%;
+}
+
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: var(--bg);
-  background-image: radial-gradient(#e8dec8 1px, transparent 1px);
-  background-size: 22px 22px;
+  min-height: 100vh;
+  font-family: "Montserrat", "Trebuchet MS", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color: var(--ink);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  background-color: var(--royal);
+  background-image:
+    /* Éclats lumineux façon affiche */
+    radial-gradient(circle at 18% 28%, rgba(255, 255, 255, 0.35) 0%, transparent 14%),
+    radial-gradient(circle at 84% 24%, rgba(160, 232, 255, 0.38) 0%, transparent 16%),
+    /* Motif géométrique losanges / constellations subtil */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%239ee2ff' stroke-opacity='0.16' stroke-width='1'%3E%3Cpolygon points='90,14 116,40 90,66 64,40'/%3E%3Cpolygon points='28,96 44,112 28,128 12,112'/%3E%3Cpolygon points='148,108 168,128 148,148 128,128'/%3E%3Cpath d='M28,112 L90,40 L148,128 L90,166 Z' stroke-opacity='0.11'/%3E%3C/g%3E%3Ccircle cx='90' cy='40' r='2' fill='%23ffffff' fill-opacity='0.32'/%3E%3Ccircle cx='148' cy='128' r='2.2' fill='%23ffffff' fill-opacity='0.28'/%3E%3Ccircle cx='28' cy='112' r='1.8' fill='%23ffffff' fill-opacity='0.25'/%3E%3C/svg%3E"),
+    radial-gradient(circle at 50% 18%, var(--sky-light) 0%, var(--sky-mid) 36%, var(--royal) 74%, var(--navy) 100%);
+  background-attachment: fixed;
 }
 
 .container {
-  max-width: 680px;
+  max-width: 700px;
   margin: 0 auto;
-  padding: 20px 16px 48px;
+  padding: 22px 16px 52px;
 }
 
-/* En-tête festif */
+/* ==========================================================================
+   EN-TÊTE INSPIRÉ DE L'AFFICHE "10e ÉDITION FESTIVAL DU JEU SEYSSES"
+   ========================================================================== */
 .hero {
-  background: linear-gradient(135deg, #1a2238 0%, #274690 100%);
-  color: #ffffff;
-  border-radius: var(--radius-lg);
-  padding: 26px 22px;
-  text-align: center;
-  box-shadow: var(--shadow);
-  margin-bottom: 22px;
   position: relative;
+  border-radius: var(--radius-xl);
+  padding: 30px 22px 24px;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 50% 62%, rgba(255, 224, 130, 0.28) 0%, transparent 46%),
+    radial-gradient(circle at 50% 25%, #3eb7ff 0%, #157cd6 52%, #0a4496 100%);
+  border: 2px solid var(--border-cyan);
+  box-shadow: var(--shadow-poster), inset 0 1px 0 rgba(255, 255, 255, 0.45);
   overflow: hidden;
 }
 
-.hero-badge {
-  display: inline-block;
-  background: rgba(244, 162, 38, 0.22);
-  border: 1px solid rgba(244, 162, 38, 0.65);
-  color: #ffd485;
-  font-weight: 700;
-  font-size: 0.8rem;
-  letter-spacing: 0.06em;
+/* Rubans diagonaux d'angle façon affiche */
+.corner-ribbon {
+  position: absolute;
+  top: 18px;
+  background: linear-gradient(180deg, #0e2b5c 0%, #081a3a 100%);
+  color: var(--gold);
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  padding: 5px 12px;
-  border-radius: 999px;
+  padding: 5px 38px;
+  border-top: 1.5px solid rgba(135, 214, 255, 0.7);
+  border-bottom: 1.5px solid rgba(135, 214, 255, 0.7);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.corner-ribbon.left {
+  left: -38px;
+  transform: rotate(-38deg);
+}
+
+.corner-ribbon.right {
+  right: -38px;
+  transform: rotate(38deg);
+}
+
+@media (max-width: 480px) {
+  .corner-ribbon {
+    display: none;
+  }
+}
+
+/* Cartouche biseauté "10e ÉDITION" */
+.edition-badge {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  background: linear-gradient(180deg, #102c5e 0%, #091b3c 100%);
+  padding: 6px 22px;
   margin-bottom: 10px;
+  font-weight: 900;
+  font-size: 0.88rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  clip-path: polygon(11px 0%, calc(100% - 11px) 0%, 100% 50%, calc(100% - 11px) 100%, 11px 100%, 0% 50%);
+  box-shadow: 0 4px 12px rgba(5, 18, 45, 0.45);
+  border-top: 1px solid rgba(154, 222, 255, 0.65);
+  border-bottom: 1px solid rgba(154, 222, 255, 0.65);
 }
 
-.hero h1 {
-  margin: 0 0 8px;
-  font-size: 1.65rem;
-  line-height: 1.2;
+.edition-badge .edition-num {
+  color: #ffffff;
 }
 
-.hero p {
+.edition-badge .edition-word {
+  color: var(--gold);
+}
+
+/* Titre monumental blanc + sous-titre doré SEYSSES */
+.poster-main-title {
   margin: 0;
-  color: #dce4f7;
-  font-size: 0.96rem;
+  font-size: clamp(1.85rem, 6.5vw, 2.65rem);
+  font-weight: 900;
+  line-height: 1.02;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 60%, #cfe8ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 4px 8px rgba(6, 26, 68, 0.55));
 }
 
-/* Bandeau d'explication */
+.poster-city {
+  margin: 4px 0 12px;
+  font-size: clamp(1.2rem, 4.3vw, 1.55rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, var(--gold-light) 0%, var(--gold) 55%, var(--gold-deep) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 3px 6px rgba(6, 24, 62, 0.55));
+}
+
+/* Meeple doré central + bandeau Jeu de piste */
+.meeple-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 4px 0 10px;
+}
+
+.meeple-svg {
+  width: 68px;
+  height: 68px;
+  filter: drop-shadow(0 6px 14px rgba(8, 30, 74, 0.45));
+}
+
+.quest-pill {
+  display: inline-block;
+  background: rgba(11, 34, 72, 0.78);
+  border: 1.5px solid var(--gold);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 6px 18px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 12px rgba(6, 21, 48, 0.35);
+}
+
+.hero-sub {
+  margin: 4px auto 0;
+  max-width: 480px;
+  color: #e6f4ff;
+  font-size: 0.94rem;
+  font-weight: 500;
+}
+
+/* Bandeau anti-spoiler */
 .intro-banner {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 5px solid var(--accent-gold);
+  background: rgba(11, 34, 72, 0.82);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-cyan);
+  border-left: 5px solid var(--gold);
   border-radius: var(--radius-md);
   padding: 13px 16px;
   margin-bottom: 20px;
-  font-size: 0.92rem;
-  color: var(--ink-muted);
-  box-shadow: 0 2px 8px rgba(26, 34, 56, 0.04);
+  font-size: 0.91rem;
+  color: #e3f2ff;
+  box-shadow: 0 6px 16px rgba(5, 22, 56, 0.25);
 }
 
 .intro-banner strong {
-  color: var(--ink);
+  color: var(--gold-light);
 }
 
-/* Liste des 7 énigmes */
+/* ==========================================================================
+   CARTES DES 7 ÉNIGMES
+   ========================================================================== */
 .enigma-list {
   display: flex;
   flex-direction: column;
@@ -112,15 +238,20 @@ body {
 
 .enigma-card {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 2px solid rgba(135, 214, 255, 0.65);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-card);
   overflow: hidden;
-  transition: border-color 0.2s ease;
+  transition: transform 0.16s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.enigma-card:hover {
+  border-color: var(--gold);
 }
 
 .enigma-card.is-open {
-  border-color: var(--primary);
+  border-color: var(--gold);
+  box-shadow: 0 10px 28px rgba(4, 18, 46, 0.38);
 }
 
 .enigma-header {
@@ -138,33 +269,34 @@ body {
 }
 
 .enigma-header:hover {
-  background-color: rgba(39, 70, 144, 0.03);
+  background-color: rgba(26, 139, 230, 0.05);
 }
 
 .enigma-header:focus-visible {
-  outline: 3px solid var(--accent-gold);
+  outline: 3px solid var(--gold);
   outline-offset: -3px;
 }
 
 .enigma-num {
   flex-shrink: 0;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 12px;
-  background: var(--surface-alt);
-  border: 2px solid var(--border);
+  background: linear-gradient(180deg, #133672 0%, var(--navy) 100%);
+  border: 2px solid var(--gold);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
-  font-size: 1.1rem;
-  color: var(--primary);
+  font-weight: 900;
+  font-size: 1.15rem;
+  color: var(--gold-light);
+  box-shadow: 0 3px 8px rgba(11, 34, 72, 0.25);
 }
 
 .enigma-card.is-open .enigma-num {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: #ffffff;
+  background: linear-gradient(180deg, var(--gold-light) 0%, var(--gold) 65%, var(--gold-deep) 100%);
+  border-color: var(--navy);
+  color: var(--navy);
 }
 
 .enigma-title-group {
@@ -175,10 +307,8 @@ body {
 .enigma-title {
   margin: 0;
   font-size: 1.08rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  font-weight: 800;
+  color: var(--navy);
 }
 
 .enigma-desc {
@@ -196,34 +326,37 @@ body {
 
 .progress-pill {
   font-size: 0.76rem;
-  font-weight: 700;
-  padding: 3px 9px;
+  font-weight: 800;
+  padding: 4px 10px;
   border-radius: 999px;
-  background: var(--surface-alt);
+  background: var(--surface-soft);
   color: var(--ink-muted);
+  border: 1px solid rgba(11, 88, 181, 0.18);
 }
 
 .progress-pill.has-progress {
-  background: #e3ecff;
-  color: var(--primary);
+  background: var(--navy);
+  color: var(--gold-light);
+  border-color: var(--gold);
 }
 
 .chevron {
-  font-size: 1.1rem;
-  color: var(--ink-muted);
+  font-size: 1.15rem;
+  color: var(--royal);
   transition: transform 0.2s ease;
 }
 
 .enigma-card.is-open .chevron {
   transform: rotate(180deg);
-  color: var(--primary);
+  color: var(--gold-deep);
 }
 
 /* Corps de carte : les 3 niveaux d'indices */
 .enigma-body {
   display: none;
   padding: 4px 18px 18px;
-  border-top: 1px dashed var(--border);
+  border-top: 1px dashed rgba(11, 88, 181, 0.24);
+  background: linear-gradient(180deg, rgba(238, 246, 255, 0.55) 0%, rgba(255, 255, 255, 0.9) 100%);
 }
 
 .enigma-card.is-open .enigma-body {
@@ -239,8 +372,8 @@ body {
 
 .hint-slot {
   border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  background: var(--surface-alt);
+  border: 1px solid var(--border-card);
+  background: #f4f9ff;
   padding: 12px 14px;
   transition: all 0.2s ease;
 }
@@ -269,44 +402,45 @@ body {
 }
 
 .level-badge {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  padding: 3px 9px;
+  padding: 4px 9px;
   border-radius: 6px;
 }
 
 .level-1 .level-badge {
-  background: rgba(29, 122, 76, 0.12);
+  background: rgba(17, 107, 64, 0.13);
   color: var(--lvl1-badge);
 }
 
 .level-2 .level-badge {
-  background: rgba(179, 92, 0, 0.12);
+  background: rgba(158, 86, 0, 0.14);
   color: var(--lvl2-badge);
 }
 
 .level-3 .level-badge {
-  background: rgba(184, 41, 20, 0.12);
+  background: rgba(168, 34, 16, 0.13);
   color: var(--lvl3-badge);
 }
 
 .btn-reveal {
   min-height: 42px;
-  padding: 8px 14px;
+  padding: 8px 15px;
   border-radius: 10px;
-  border: none;
-  font-weight: 700;
-  font-size: 0.9rem;
+  border: 1px solid rgba(165, 226, 255, 0.65);
+  font-weight: 800;
+  font-size: 0.88rem;
   cursor: pointer;
-  background: var(--primary);
+  background: linear-gradient(180deg, #2188e8 0%, #0c52ac 100%);
   color: #ffffff;
-  transition: background-color 0.15s ease, transform 0.1s ease;
+  box-shadow: 0 3px 10px rgba(11, 56, 130, 0.28);
+  transition: filter 0.15s ease, transform 0.1s ease;
 }
 
 .btn-reveal:hover:not(:disabled) {
-  background: var(--primary-hover);
+  filter: brightness(1.08);
 }
 
 .btn-reveal:active:not(:disabled) {
@@ -314,31 +448,34 @@ body {
 }
 
 .btn-reveal:disabled {
-  background: #d8d2c5;
-  color: #7c776b;
+  background: #dce6f2;
+  border-color: #c7d5e8;
+  color: #6f829c;
+  box-shadow: none;
   cursor: not-allowed;
 }
 
 .btn-hide-hint {
-  background: transparent;
-  border: 1px solid rgba(26, 34, 56, 0.2);
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(11, 34, 72, 0.22);
   color: var(--ink-muted);
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.78rem;
+  font-weight: 700;
   padding: 5px 10px;
   border-radius: 8px;
   cursor: pointer;
 }
 
 .btn-hide-hint:hover {
-  background: rgba(255, 255, 255, 0.7);
-  color: var(--ink);
+  background: #ffffff;
+  color: var(--navy);
 }
 
 .hint-text {
   margin: 10px 0 2px;
-  font-size: 0.97rem;
-  color: var(--ink);
+  font-size: 0.96rem;
+  font-weight: 500;
+  color: var(--navy);
   animation: fadeIn 0.22s ease;
 }
 
@@ -347,46 +484,72 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Pied de page */
+/* ==========================================================================
+   PIED DE PAGE FAÇON BAS D'AFFICHE
+   ========================================================================== */
 .footer-actions {
   margin-top: 28px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
 }
 
 .btn-secondary {
-  background: var(--surface);
-  color: var(--ink);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 10px 16px;
-  font-size: 0.9rem;
-  font-weight: 600;
+  background: linear-gradient(180deg, #102c5e 0%, #091b3c 100%);
+  color: var(--gold-light);
+  border: 1.5px solid var(--gold);
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 0.88rem;
+  font-weight: 700;
   cursor: pointer;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 2px 6px rgba(26, 34, 56, 0.05);
+  box-shadow: 0 4px 14px rgba(5, 18, 45, 0.35);
+  transition: transform 0.12s ease, filter 0.15s ease;
 }
 
 .btn-secondary:hover {
-  border-color: var(--primary);
-  color: var(--primary);
+  filter: brightness(1.12);
+}
+
+.festival-footer-box {
+  width: 100%;
+  background: rgba(8, 27, 62, 0.78);
+  border: 1px solid var(--border-cyan);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.festival-footer-date {
+  color: var(--gold);
+  font-weight: 900;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.festival-footer-place {
+  font-size: 0.84rem;
+  color: #dbeeff;
+  margin-top: 3px;
 }
 
 .footer-links {
+  margin-top: 8px;
   font-size: 0.84rem;
-  color: var(--ink-muted);
 }
 
 .footer-links a {
-  color: var(--primary);
+  color: var(--gold-light);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .footer-links a:hover {
@@ -394,15 +557,15 @@ body {
 }
 
 /* ==========================================================================
-   PAGE QR CODE & AFFICHE A4 IMPRIMABLE
+   PAGE QR CODE & AFFICHE A4 IMPRIMABLE (STYLE AFFICHE OFFICIELLE)
    ========================================================================== */
 .qr-toolbar {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border-cyan);
   border-radius: var(--radius-lg);
   padding: 18px;
   margin-bottom: 24px;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-card);
 }
 
 .qr-toolbar-top {
@@ -423,16 +586,17 @@ body {
 
 .qr-url-field label {
   font-size: 0.86rem;
-  font-weight: 700;
-  color: var(--ink);
+  font-weight: 800;
+  color: var(--navy);
 }
 
 .qr-url-input {
   width: 100%;
   padding: 10px 12px;
-  font-size: 0.95rem;
-  border: 1px solid var(--border);
+  font-size: 0.94rem;
+  border: 1.5px solid #b9d4f2;
   border-radius: 10px;
+  color: var(--navy);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
@@ -443,66 +607,59 @@ body {
 }
 
 .btn-primary {
-  background: var(--primary);
+  background: linear-gradient(180deg, #2188e8 0%, #0c52ac 100%);
   color: #ffffff;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 16px;
-  font-size: 0.92rem;
-  font-weight: 700;
+  border: 1px solid rgba(165, 226, 255, 0.7);
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  font-weight: 800;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  box-shadow: 0 4px 12px rgba(11, 56, 130, 0.3);
 }
 
 .btn-primary:hover {
-  background: var(--primary-hover);
+  filter: brightness(1.08);
 }
 
+/* Feuille A4 d'affiche QR Code */
 .poster-sheet {
-  background: #ffffff;
-  border: 3px solid var(--ink);
-  border-radius: 22px;
-  padding: 36px 28px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  padding: 38px 28px 30px;
   text-align: center;
-  box-shadow: var(--shadow);
-}
-
-.poster-festival {
-  display: inline-block;
-  background: #1a2238;
-  color: #ffd485;
-  font-weight: 800;
-  font-size: 0.92rem;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  padding: 7px 16px;
-  border-radius: 999px;
-  margin-bottom: 16px;
-}
-
-.poster-title {
-  margin: 0 0 8px;
-  font-size: 2.2rem;
-  line-height: 1.15;
-  color: var(--ink);
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 50% 52%, rgba(255, 214, 112, 0.25) 0%, transparent 45%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%239ee2ff' stroke-opacity='0.2' stroke-width='1'%3E%3Cpolygon points='90,14 116,40 90,66 64,40'/%3E%3Cpolygon points='28,96 44,112 28,128 12,112'/%3E%3Cpolygon points='148,108 168,128 148,148 128,128'/%3E%3Cpath d='M28,112 L90,40 L148,128 L90,166 Z' stroke-opacity='0.14'/%3E%3C/g%3E%3C/svg%3E"),
+    radial-gradient(circle at 50% 24%, #49c0ff 0%, #1680db 48%, #09408e 100%);
+  border: 3px solid rgba(154, 222, 255, 0.8);
+  box-shadow: var(--shadow-poster);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 .poster-subtitle {
-  margin: 0 auto 24px;
-  max-width: 460px;
-  font-size: 1.12rem;
-  color: var(--ink-muted);
+  margin: 10px auto 22px;
+  max-width: 470px;
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: #eef8ff;
 }
 
 .qr-frame {
-  width: min(320px, 78vw);
-  margin: 0 auto 20px;
-  padding: 14px;
-  border: 3px dashed var(--accent-gold);
-  border-radius: 20px;
+  position: relative;
+  width: min(310px, 76vw);
+  margin: 0 auto 18px;
+  padding: 16px;
+  border: 4px solid var(--gold);
+  border-radius: 22px;
   background: #ffffff;
+  box-shadow: 0 10px 28px rgba(5, 22, 58, 0.42);
 }
 
 .qr-frame svg {
@@ -514,31 +671,46 @@ body {
 .poster-url {
   display: inline-block;
   margin-top: 4px;
-  padding: 6px 14px;
-  border-radius: 8px;
-  background: var(--surface-alt);
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: rgba(8, 27, 62, 0.85);
+  border: 1px solid var(--border-cyan);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.88rem;
-  color: var(--ink);
+  font-size: 0.86rem;
+  color: var(--gold-light);
   word-break: break-all;
 }
 
-.poster-steps {
-  margin-top: 22px;
-  padding-top: 18px;
-  border-top: 1px solid var(--border);
-  font-size: 0.95rem;
-  color: var(--ink-muted);
+.poster-bottom-bar {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(154, 222, 255, 0.4);
+}
+
+.poster-bottom-gold {
+  font-size: 1.08rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-shadow: 0 2px 5px rgba(5, 20, 50, 0.5);
+}
+
+.poster-bottom-sub {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  color: #e3f2ff;
 }
 
 @media print {
   @page {
     size: A4 portrait;
-    margin: 14mm;
+    margin: 10mm;
   }
 
   body {
     background: #ffffff !important;
+    min-height: auto;
   }
 
   .no-print {
@@ -552,8 +724,7 @@ body {
 
   .poster-sheet {
     box-shadow: none;
-    border-width: 3px;
-    padding: 42px 32px;
+    padding: 44px 32px 36px;
   }
 
   .qr-frame {

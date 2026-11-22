@@ -12,7 +12,7 @@
     <section class="qr-toolbar no-print" aria-label="Outils QR Code">
       <div class="qr-toolbar-top">
         <a href="index.html" class="btn-secondary">← Retour aux indices</a>
-        <strong style="font-size: 0.92rem;">Affiche QR Code prête à imprimer</strong>
+        <strong style="font-size: 0.92rem; color: #0b2248;">Affiche QR Code prête à imprimer</strong>
       </div>
 
       <div class="qr-url-field">
@@ -39,22 +39,34 @@
       </div>
     </section>
 
-    <!-- Affiche imprimable -->
+    <!-- Affiche imprimable inspirée du visuel officiel de la 10e Édition -->
     <section class="poster-sheet" aria-label="Affiche QR Code du jeu de piste">
-      <div class="poster-festival" id="poster-festival">
-        🎲 Festival du Jeu de Seysses 2026 🎲
+      <div class="corner-ribbon left" aria-hidden="true">Jeu de Piste</div>
+      <div class="corner-ribbon right" aria-hidden="true">7 Énigmes</div>
+
+      <div class="edition-badge">
+        <span class="edition-num">10<sup>e</sup></span>
+        <span class="edition-word">Édition</span>
       </div>
-      <h1 class="poster-title">Jeu de Piste — Indices</h1>
+
+      <h1 class="poster-main-title">Festival<br />du Jeu</h1>
+      <div class="poster-city">Seysses</div>
+
+      <div class="quest-pill">🔎 Indices du Jeu de Piste</div>
+
       <p class="poster-subtitle">
-        Bloqués sur l'une des 7 énigmes ? Scannez ce QR Code avec votre téléphone pour obtenir un coup de pouce !
+        Bloqués sur l'une des 7 énigmes ? Scannez ce QR Code avec votre téléphone pour débloquer progressivement jusqu'à 3 indices !
       </p>
 
       <div class="qr-frame" id="qr-container" aria-live="polite"></div>
 
       <div class="poster-url" id="poster-url-text"></div>
 
-      <div class="poster-steps">
-        <strong>3 niveaux d'indices progressifs par énigme</strong> • Sans divulgâcher directement la réponse !
+      <div class="poster-bottom-bar">
+        <div class="poster-bottom-gold">Samedi 28 Novembre 2026 • Salle des fêtes</div>
+        <div class="poster-bottom-sub">
+          3 niveaux d'aide anti-spoiler par énigme • Comité Festif Seyssois
+        </div>
       </div>
     </section>
 
@@ -72,12 +84,6 @@
       const copyBtn = document.getElementById("btn-copy-url");
       const canvasEl = document.getElementById("qr-export-canvas");
 
-      if (config.titreFestival) {
-        document.getElementById("poster-festival").textContent =
-          "🎲 " + config.titreFestival + " 🎲";
-      }
-
-      // Détermine automatiquement l'URL publique si hébergé en http(s) non-local, sinon utilise urlSiteParDefaut
       function detectTargetUrl() {
         const isPublicWeb =
           (location.protocol === "https:" || location.protocol === "http:") &&
@@ -96,7 +102,7 @@
           containerEl.innerHTML = window.SimpleQR.toSvgString(url, 4);
         } catch (err) {
           containerEl.innerHTML =
-            '<p style="color:#b82914;font-weight:700;">' + err.message + "</p>";
+            '<p style="color:#a82210;font-weight:700;">' + err.message + "</p>";
         }
       }
 

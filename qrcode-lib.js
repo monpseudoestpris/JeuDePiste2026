@@ -377,7 +377,7 @@
     }
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" shape-rendering="crispEdges" role="img" aria-label="QR Code">` +
       `<rect width="100%" height="100%" fill="#ffffff"/>` +
-      `<path d="${parts.join("")}" fill="#1a2238"/>` +
+      `<path d="${parts.join("")}" fill="#0b2248"/>` +
       `</svg>`;
   }
 
@@ -391,7 +391,7 @@
     const ctx = canvas.getContext("2d");
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, actualSize, actualSize);
-    ctx.fillStyle = "#1a2238";
+    ctx.fillStyle = "#0b2248";
     for (let r = 0; r < size; r++) {
       for (let c = 0; c < size; c++) {
         if (modules[r][c]) {
