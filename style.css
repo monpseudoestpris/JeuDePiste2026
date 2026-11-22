@@ -730,19 +730,18 @@ body {
   background: rgba(255, 248, 227, 0.7);
 }
 
-/* Modale Prison Monopoly avec barreaux par-dessus le bloc de saisie des lettres uniquement */
+/* Modale Prison Monopoly plein écran avec barreaux métalliques */
 .jail-modal {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  z-index: 25;
-  background: rgba(5, 14, 32, 0.84);
-  backdrop-filter: blur(4px);
+  z-index: 1500;
+  background: rgba(5, 14, 32, 0.86);
+  backdrop-filter: blur(5px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 18px;
+  padding: 20px;
   overflow: hidden;
-  border-radius: inherit;
 }
 
 .jail-modal[hidden] {
@@ -780,11 +779,11 @@ body {
 }
 
 .jail-crossbar.top {
-  margin-top: 18px;
+  margin-top: 8vh;
 }
 
 .jail-crossbar.bottom {
-  margin-bottom: 18px;
+  margin-bottom: 8vh;
 }
 
 .jail-bars-row {

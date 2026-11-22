@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Indices — Jeu de Piste | Festival du Jeu de Seysses 2026</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=20261122-4" />
 </head>
 <body>
   <main class="container">
@@ -116,35 +116,6 @@
           🔄 Remettre les lettres à zéro
         </button>
       </div>
-
-      <!-- Modale Prison Monopoly avec barreaux uniquement par-dessus la zone de saisie des lettres -->
-      <div class="jail-modal" id="jail-modal" hidden role="alert" aria-live="polite" aria-labelledby="jail-modal-title">
-        <div class="jail-bars-overlay" aria-hidden="true">
-          <div class="jail-crossbar top"></div>
-          <div class="jail-bars-row">
-            <span class="jail-bar"></span>
-            <span class="jail-bar"></span>
-            <span class="jail-bar"></span>
-            <span class="jail-bar"></span>
-            <span class="jail-bar"></span>
-            <span class="jail-bar"></span>
-            <span class="jail-bar"></span>
-          </div>
-          <div class="jail-crossbar bottom"></div>
-        </div>
-
-        <div class="jail-modal-card">
-          <div class="jail-modal-badge">🚔 ALLEZ EN PRISON !</div>
-          <h2 class="jail-modal-title" id="jail-modal-title">Pas de lettres au hasard !</h2>
-          <p class="jail-modal-text">
-            Tu as tenté plusieurs mauvaises lettres de suite…
-          </p>
-          <div class="jail-countdown-box">
-            <span class="jail-countdown-label">Libération dans</span>
-            <strong class="jail-countdown-time" id="jail-timer">0:30</strong>
-          </div>
-        </div>
-      </div>
     </section>
 
     <section class="intro-banner" aria-label="Mode d'emploi">
@@ -192,8 +163,37 @@
     </div>
   </div>
 
-  <script src="indices.js"></script>
-  <script src="qrcode-lib.js"></script>
+  <!-- Modale Prison Monopoly plein écran avec barreaux -->
+  <div class="jail-modal" id="jail-modal" hidden role="dialog" aria-modal="true" aria-labelledby="jail-modal-title">
+    <div class="jail-bars-overlay" aria-hidden="true">
+      <div class="jail-crossbar top"></div>
+      <div class="jail-bars-row">
+        <span class="jail-bar"></span>
+        <span class="jail-bar"></span>
+        <span class="jail-bar"></span>
+        <span class="jail-bar"></span>
+        <span class="jail-bar"></span>
+        <span class="jail-bar"></span>
+        <span class="jail-bar"></span>
+      </div>
+      <div class="jail-crossbar bottom"></div>
+    </div>
+
+    <div class="jail-modal-card">
+      <div class="jail-modal-badge">🚔 ALLEZ EN PRISON !</div>
+      <h2 class="jail-modal-title" id="jail-modal-title">Pas de lettres au hasard !</h2>
+      <p class="jail-modal-text">
+        Tu as tenté plusieurs mauvaises lettres de suite…
+      </p>
+      <div class="jail-countdown-box">
+        <span class="jail-countdown-label">Libération dans</span>
+        <strong class="jail-countdown-time" id="jail-timer">0:30</strong>
+      </div>
+    </div>
+  </div>
+
+  <script src="indices.js?v=20261122-4"></script>
+  <script src="qrcode-lib.js?v=20261122-4"></script>
   <script>
     (function () {
       const STORAGE_KEY = "seysses2026_indices_state_v1";
@@ -391,6 +391,9 @@
             saveAntiCheat();
           }
           jailAlertEl.hidden = true;
+          if (lightboxEl.hidden) {
+            document.body.style.overflow = "";
+          }
           if (jailIntervalId) {
             clearInterval(jailIntervalId);
             jailIntervalId = null;
@@ -403,6 +406,7 @@
         const remainingSec = Math.max(1, Math.ceil((antiCheat.lockUntil - Date.now()) / 1000));
         jailTimerEl.textContent = formatSeconds(remainingSec);
         jailAlertEl.hidden = false;
+        document.body.style.overflow = "hidden";
 
         if (!jailIntervalId) {
           jailIntervalId = setInterval(syncJailUi, 500);
@@ -412,8 +416,8 @@
       function triggerJail(cellKey) {
         const countForCell = (antiCheat.jailCountByCell[cellKey] || 0) + 1;
         antiCheat.jailCountByCell[cellKey] = countForCell;
-        // Démarre à 30 s pour chaque case, puis plafonne à 1 min (60 s)
-        const durationSec = countForCell === 1 ? 30 : 60;
+        // Temps de prison plafonné à 30 s
+        const durationSec = 30;
         antiCheat.lockUntil = Date.now() + durationSec * 1000;
         antiCheat.wrongByCell[cellKey] = 0;
         saveAntiCheat();
