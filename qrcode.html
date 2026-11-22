@@ -3,8 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none';"
+  />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>QR Code — Jeu de Piste | Festival du Jeu de Seysses 2026</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=20261122-8" />
 </head>
 <body>
   <main class="container">
@@ -12,7 +17,7 @@
     <section class="qr-toolbar no-print" aria-label="Outils QR Code">
       <div class="qr-toolbar-top">
         <a href="index.html" class="btn-secondary">← Retour aux énigmes</a>
-        <strong style="font-size: 0.92rem; color: #0b2248;">Affiche QR Code prête à imprimer</strong>
+        <strong class="qr-toolbar-heading">Affiche QR Code prête à imprimer</strong>
       </div>
 
       <div class="qr-url-field">
@@ -22,6 +27,7 @@
           id="qr-url"
           class="qr-url-input"
           spellcheck="false"
+          maxlength="200"
           placeholder="https://monpseudoestpris.github.io/JeuDePiste2026/"
         />
       </div>
@@ -70,74 +76,12 @@
       </div>
     </section>
 
-    <canvas id="qr-export-canvas" style="display: none;"></canvas>
+    <canvas id="qr-export-canvas" hidden></canvas>
   </main>
 
-  <script src="indices.js"></script>
-  <script src="qrcode-lib.js"></script>
-  <script>
-    (function () {
-      const config = window.JEU_DE_PISTE_CONFIG || {};
-      const inputEl = document.getElementById("qr-url");
-      const containerEl = document.getElementById("qr-container");
-      const urlTextEl = document.getElementById("poster-url-text");
-      const copyBtn = document.getElementById("btn-copy-url");
-      const canvasEl = document.getElementById("qr-export-canvas");
-
-      function detectTargetUrl() {
-        const isPublicWeb =
-          (location.protocol === "https:" || location.protocol === "http:") &&
-          location.hostname !== "localhost" &&
-          location.hostname !== "127.0.0.1";
-        if (isPublicWeb) {
-          return new URL("index.html", location.href).href.replace(/index\.html$/, "");
-        }
-        return config.urlSiteParDefaut || "https://monpseudoestpris.github.io/JeuDePiste2026/";
-      }
-
-      function updateQr() {
-        const url = inputEl.value.trim() || config.urlSiteParDefaut;
-        urlTextEl.textContent = url;
-        try {
-          containerEl.innerHTML = window.SimpleQR.toSvgString(url, 4);
-        } catch (err) {
-          containerEl.innerHTML =
-            '<p style="color:#a82210;font-weight:700;">' + err.message + "</p>";
-        }
-      }
-
-      inputEl.value = detectTargetUrl();
-      updateQr();
-
-      inputEl.addEventListener("input", updateQr);
-
-      document.getElementById("btn-print").addEventListener("click", () => {
-        window.print();
-      });
-
-      document.getElementById("btn-download-png").addEventListener("click", () => {
-        const url = inputEl.value.trim() || config.urlSiteParDefaut;
-        window.SimpleQR.drawToCanvas(canvasEl, url, 1024, 4);
-        const link = document.createElement("a");
-        link.download = "qrcode-jeu-de-piste-seysses-2026.png";
-        link.href = canvasEl.toDataURL("image/png");
-        link.click();
-      });
-
-      copyBtn.addEventListener("click", async () => {
-        const url = inputEl.value.trim();
-        try {
-          await navigator.clipboard.writeText(url);
-          const original = copyBtn.textContent;
-          copyBtn.textContent = "✅ Lien copié !";
-          setTimeout(() => {
-            copyBtn.textContent = original;
-          }, 1800);
-        } catch (_) {
-          inputEl.select();
-        }
-      });
-    })();
-  </script>
+  <script src="indices.js?v=20261122-8" defer></script>
+  <script src="qrcode-lib.js?v=20261122-8" defer></script>
+  <script src="js/storage.js?v=20261122-8" defer></script>
+  <script src="js/qr-page.js?v=20261122-8" defer></script>
 </body>
 </html>

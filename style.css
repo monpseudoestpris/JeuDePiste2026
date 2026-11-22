@@ -52,306 +52,21 @@ body {
   -webkit-font-smoothing: antialiased;
   background-color: var(--royal);
   background-image:
-    /* Éclats lumineux façon affiche */
     radial-gradient(circle at 18% 28%, rgba(255, 255, 255, 0.35) 0%, transparent 14%),
     radial-gradient(circle at 84% 24%, rgba(160, 232, 255, 0.38) 0%, transparent 16%),
-    /* Motif géométrique losanges / constellations subtil */
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%239ee2ff' stroke-opacity='0.16' stroke-width='1'%3E%3Cpolygon points='90,14 116,40 90,66 64,40'/%3E%3Cpolygon points='28,96 44,112 28,128 12,112'/%3E%3Cpolygon points='148,108 168,128 148,148 128,128'/%3E%3Cpath d='M28,112 L90,40 L148,128 L90,166 Z' stroke-opacity='0.11'/%3E%3C/g%3E%3Ccircle cx='90' cy='40' r='2' fill='%23ffffff' fill-opacity='0.32'/%3E%3Ccircle cx='148' cy='128' r='2.2' fill='%23ffffff' fill-opacity='0.28'/%3E%3Ccircle cx='28' cy='112' r='1.8' fill='%23ffffff' fill-opacity='0.25'/%3E%3C/svg%3E"),
     radial-gradient(circle at 50% 18%, var(--sky-light) 0%, var(--sky-mid) 36%, var(--royal) 74%, var(--navy) 100%);
   background-attachment: fixed;
+}
+
+body.is-scroll-locked {
+  overflow: hidden;
 }
 
 .container {
   max-width: 700px;
   margin: 0 auto;
   padding: 22px 16px 52px;
-}
-
-.container-wide {
-  max-width: 820px;
-}
-
-/* ==========================================================================
-   PLATEAU DES 8 DOMINOS (LANDING PAGE)
-   ========================================================================== */
-.section-heading {
-  margin: 22px 0 14px;
-  text-align: center;
-  font-size: 1.25rem;
-  font-weight: 900;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #ffffff;
-  text-shadow: 0 3px 8px rgba(5, 22, 56, 0.5);
-}
-
-.domino-board {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-}
-
-@media (min-width: 680px) {
-  .domino-board {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-  }
-}
-
-.domino-tile {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  text-decoration: none;
-  color: var(--navy);
-  background: linear-gradient(180deg, #fffdf8 0%, #f4efe2 100%);
-  border: 2.5px solid var(--gold);
-  border-radius: 18px;
-  box-shadow:
-    0 6px 0 #091d42,
-    0 12px 24px rgba(4, 18, 46, 0.36),
-    inset 0 1px 0 #ffffff;
-  overflow: hidden;
-  transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.18s ease;
-}
-
-.domino-tile:hover {
-  transform: translateY(-3px);
-  border-color: #ffe29a;
-  box-shadow:
-    0 9px 0 #091d42,
-    0 16px 30px rgba(4, 18, 46, 0.44),
-    inset 0 1px 0 #ffffff;
-}
-
-.domino-tile:active {
-  transform: translateY(3px);
-  box-shadow:
-    0 3px 0 #091d42,
-    0 6px 14px rgba(4, 18, 46, 0.35);
-}
-
-.domino-tile.is-solved {
-  border-color: #22c55e;
-  background: linear-gradient(180deg, #f5fff9 0%, #e4faee 100%);
-}
-
-/* 8e Domino spécial QR Code (bleu nuit & or) */
-.domino-tile.domino-qr {
-  background: linear-gradient(180deg, #133672 0%, #091b3c 100%);
-  color: #ffffff;
-  border-color: var(--gold-light);
-}
-
-.domino-half {
-  padding: 12px 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.domino-top {
-  position: relative;
-  min-height: 92px;
-}
-
-.domino-bottom {
-  min-height: 108px;
-  gap: 4px;
-}
-
-.domino-corner-num {
-  position: absolute;
-  top: 7px;
-  left: 9px;
-  font-size: 0.72rem;
-  font-weight: 900;
-  color: var(--ink-muted);
-  opacity: 0.8;
-}
-
-.domino-qr .domino-corner-num {
-  color: var(--gold-light);
-}
-
-.domino-solved-badge {
-  position: absolute;
-  top: 6px;
-  right: 8px;
-  width: 22px;
-  height: 22px;
-  border-radius: 999px;
-  background: #16a34a;
-  color: #ffffff;
-  font-size: 0.78rem;
-  font-weight: 900;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(22, 163, 74, 0.45);
-}
-
-.domino-pips-svg {
-  width: 86px;
-  height: 58px;
-}
-
-.domino-qr-svg {
-  width: 56px;
-  height: 56px;
-}
-
-/* Barre centrale du domino + clou doré */
-.domino-divider {
-  position: relative;
-  height: 4px;
-  margin: 0 12px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, rgba(11, 34, 72, 0.25), var(--navy), rgba(11, 34, 72, 0.25));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.domino-qr .domino-divider {
-  background: linear-gradient(90deg, rgba(250, 224, 158, 0.25), var(--gold), rgba(250, 224, 158, 0.25));
-}
-
-.domino-pin {
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #fff2be 0%, #e5b55f 55%, #9f6a16 100%);
-  border: 1.5px solid #0b2248;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
-}
-
-.domino-icon {
-  font-size: 1.35rem;
-  line-height: 1;
-}
-
-.domino-title {
-  font-size: 0.94rem;
-  font-weight: 900;
-  line-height: 1.2;
-  color: var(--navy);
-}
-
-.domino-qr .domino-title {
-  color: var(--gold-light);
-}
-
-.domino-status {
-  margin-top: 2px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: rgba(11, 34, 72, 0.08);
-  color: var(--ink-muted);
-}
-
-.domino-status.has-hints {
-  background: var(--navy);
-  color: var(--gold-light);
-}
-
-.domino-qr .domino-status {
-  background: rgba(255, 255, 255, 0.14);
-  color: #e3f2ff;
-}
-
-/* ==========================================================================
-   PAGE DÉDIÉE D'UNE ÉNIGME (enigme.html)
-   ========================================================================== */
-.enigma-page-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.enigma-step-indicator {
-  background: rgba(8, 27, 62, 0.8);
-  border: 1px solid var(--border-cyan);
-  color: var(--gold-light);
-  font-size: 0.82rem;
-  font-weight: 800;
-  padding: 6px 14px;
-  border-radius: 999px;
-}
-
-.enigma-detail-card {
-  background: var(--surface);
-  border: 2.5px solid var(--gold);
-  border-radius: var(--radius-xl);
-  padding: 20px 18px 24px;
-  box-shadow: var(--shadow-poster);
-}
-
-.enigma-detail-header {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding-bottom: 14px;
-  border-bottom: 1px dashed rgba(11, 88, 181, 0.25);
-}
-
-.enigma-num.is-large {
-  width: 50px;
-  height: 50px;
-  font-size: 1.3rem;
-}
-
-.enigma-detail-title {
-  margin: 0;
-  font-size: 1.35rem;
-  font-weight: 900;
-  color: var(--navy);
-  line-height: 1.2;
-}
-
-.hints-section-title {
-  margin: 20px 0 4px;
-  font-size: 1.02rem;
-  font-weight: 900;
-  color: var(--navy);
-}
-
-.quick-case-entry {
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px dashed rgba(250, 224, 158, 0.35);
-}
-
-.quick-case-label {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--gold-light);
-  margin-bottom: 8px;
-}
-
-.quick-case-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.quick-cell {
-  width: 82px;
-}
-
-.enigma-prev-next {
-  margin-top: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  flex-wrap: wrap;
 }
 
 /* ==========================================================================
@@ -372,7 +87,6 @@ body {
   overflow: hidden;
 }
 
-/* Rubans diagonaux d'angle façon affiche */
 .corner-ribbon {
   position: absolute;
   top: 18px;
@@ -405,7 +119,6 @@ body {
   }
 }
 
-/* Cartouche biseauté "10e ÉDITION" */
 .edition-badge {
   display: inline-flex;
   align-items: baseline;
@@ -431,7 +144,6 @@ body {
   color: var(--gold);
 }
 
-/* Titre monumental blanc + sous-titre doré SEYSSES */
 .poster-main-title {
   margin: 0;
   font-size: clamp(1.85rem, 6.5vw, 2.65rem);
@@ -459,7 +171,6 @@ body {
   filter: drop-shadow(0 3px 6px rgba(6, 24, 62, 0.55));
 }
 
-/* Meeple doré central + bandeau Jeu de piste */
 .meeple-wrap {
   display: flex;
   justify-content: center;
@@ -496,7 +207,6 @@ body {
   font-weight: 500;
 }
 
-/* Bloc QR Code + Lien bien visible dans l'en-tête */
 .hero-qr-box {
   margin: 18px auto 2px;
   max-width: 440px;
@@ -569,7 +279,7 @@ body {
 }
 
 /* ==========================================================================
-   PANNEAU LIVRET (CONSEILS PRATIQUES + GRILLE 7 CASES ÉNIGME FACILE)
+   PANNEAU LIVRET (ÉNIGME FACILE + ÉNIGME MYSTÈRE)
    ========================================================================== */
 .booklet-panel {
   position: relative;
@@ -580,15 +290,6 @@ body {
   padding: 16px 18px;
   margin-bottom: 16px;
   box-shadow: var(--shadow-card);
-}
-
-.booklet-panel-title {
-  margin: 0 0 10px;
-  font-size: 1.02rem;
-  font-weight: 900;
-  color: var(--navy);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
 }
 
 .booklet-tips-list {
@@ -730,7 +431,72 @@ body {
   background: rgba(255, 248, 227, 0.7);
 }
 
-/* Modale Prison Monopoly plein écran avec barreaux métalliques */
+.easy-cell.is-wrong {
+  background: #fff1f2;
+  border-color: #fb7185;
+}
+
+.easy-cell.is-wrong .easy-cell-input {
+  color: #9f1239;
+}
+
+.easy-cell.is-jailed {
+  background: repeating-linear-gradient(
+    90deg,
+    #e2e8f0,
+    #e2e8f0 6px,
+    #cbd5e1 6px,
+    #cbd5e1 9px
+  );
+  border-color: #64748b;
+  opacity: 0.85;
+}
+
+.easy-cell.is-jailed .easy-cell-num {
+  background: #475569;
+  color: #f8fafc;
+}
+
+.easy-cell.is-jailed .easy-cell-input {
+  color: #475569;
+  cursor: not-allowed;
+}
+
+.easy-cell.is-correct {
+  background: #d1fae5;
+  border-color: #22c55e;
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.45);
+}
+
+.easy-cell.is-correct .easy-cell-num {
+  background: #16a34a;
+  color: #ffffff;
+  border-bottom-color: #15803d;
+}
+
+.easy-cell.is-correct .easy-cell-input {
+  color: #065f46;
+}
+
+.easy-cell.is-correct .easy-cell-input:focus {
+  background: rgba(187, 247, 208, 0.65);
+}
+
+.easy-grid-complete {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(22, 163, 74, 0.24);
+  border: 1px solid #4ade80;
+  color: #dcfce7;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ==========================================================================
+   MODALE PRISON MONOPOLY PLEIN ÉCRAN AVEC BARREAUX MÉTALLIQUES
+   ========================================================================== */
 .jail-modal {
   position: fixed;
   inset: 0;
@@ -748,7 +514,6 @@ body {
   display: none !important;
 }
 
-/* Grille de barreaux métalliques en premier plan */
 .jail-bars-overlay {
   position: absolute;
   inset: 0;
@@ -761,12 +526,8 @@ body {
 }
 
 @keyframes slamBars {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(0);
-  }
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
 }
 
 .jail-crossbar {
@@ -810,7 +571,6 @@ body {
   box-shadow: 4px 0 12px rgba(0, 0, 0, 0.55), -2px 0 6px rgba(0, 0, 0, 0.35);
 }
 
-/* Pancarte centrale lisible derrière / entre les barreaux */
 .jail-modal-card {
   position: relative;
   z-index: 3;
@@ -879,72 +639,9 @@ body {
   color: #fde047;
 }
 
-/* Case erronée (1er essai) et case verrouillée en prison */
-.easy-cell.is-wrong {
-  background: #fff1f2;
-  border-color: #fb7185;
-}
-
-.easy-cell.is-wrong .easy-cell-input {
-  color: #9f1239;
-}
-
-.easy-cell.is-jailed {
-  background: repeating-linear-gradient(
-    90deg,
-    #e2e8f0,
-    #e2e8f0 6px,
-    #cbd5e1 6px,
-    #cbd5e1 9px
-  );
-  border-color: #64748b;
-  opacity: 0.85;
-}
-
-.easy-cell.is-jailed .easy-cell-num {
-  background: #475569;
-  color: #f8fafc;
-}
-
-.easy-cell.is-jailed .easy-cell-input {
-  color: #475569;
-  cursor: not-allowed;
-}
-
-/* Case validée en vert quand la bonne lettre est saisie */
-.easy-cell.is-correct {
-  background: #d1fae5;
-  border-color: #22c55e;
-  box-shadow: 0 0 12px rgba(34, 197, 94, 0.45);
-}
-
-.easy-cell.is-correct .easy-cell-num {
-  background: #16a34a;
-  color: #ffffff;
-  border-bottom-color: #15803d;
-}
-
-.easy-cell.is-correct .easy-cell-input {
-  color: #065f46;
-}
-
-.easy-cell.is-correct .easy-cell-input:focus {
-  background: rgba(187, 247, 208, 0.65);
-}
-
-.easy-grid-complete {
-  margin-top: 10px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: rgba(22, 163, 74, 0.24);
-  border: 1px solid #4ade80;
-  color: #dcfce7;
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-align: center;
-}
-
-/* Planche SVG de l'énigme intégrée dans chaque carte */
+/* ==========================================================================
+   PLANCHE SVG & VISIONNEUSE PLEIN ÉCRAN (LIGHTBOX)
+   ========================================================================== */
 .enigma-sheet-wrap {
   margin-top: 14px;
   background: #ffffff;
@@ -1004,7 +701,6 @@ body {
   border-radius: 6px;
 }
 
-/* Visionneuse plein écran zoomable (Lightbox) */
 .lightbox {
   position: fixed;
   inset: 0;
@@ -1084,7 +780,9 @@ body {
   transition: width 0.15s ease;
 }
 
-/* Encadré "Aide du livret" affiché dans chaque énigme AVANT les 3 indices */
+/* ==========================================================================
+   CARTES DES 7 ÉNIGMES, AIDE DU LIVRET & INDICES
+   ========================================================================== */
 .enigma-booklet-box {
   margin-top: 14px;
   padding: 12px 14px;
@@ -1115,7 +813,6 @@ body {
   margin-top: 4px;
 }
 
-/* Bandeau anti-spoiler */
 .intro-banner {
   background: rgba(11, 34, 72, 0.82);
   backdrop-filter: blur(8px);
@@ -1133,9 +830,6 @@ body {
   color: var(--gold-light);
 }
 
-/* ==========================================================================
-   CARTES DES 7 ÉNIGMES
-   ========================================================================== */
 .enigma-list {
   display: flex;
   flex-direction: column;
@@ -1278,7 +972,6 @@ body {
   color: var(--gold-deep);
 }
 
-/* Corps de carte : les 3 niveaux d'indices */
 .enigma-body {
   display: none;
   padding: 4px 18px 18px;
@@ -1411,7 +1104,9 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Grand bloc BONUS en fin de page */
+/* ==========================================================================
+   GRAND BLOC BONUS & PIED DE PAGE
+   ========================================================================== */
 .bonus-finale-card {
   margin-top: 26px;
   padding: 26px 22px;
@@ -1451,9 +1146,6 @@ body {
   text-align: left;
 }
 
-/* ==========================================================================
-   PIED DE PAGE FAÇON BAS D'AFFICHE
-   ========================================================================== */
 .footer-actions {
   margin-top: 28px;
   text-align: center;
@@ -1524,7 +1216,7 @@ body {
 }
 
 /* ==========================================================================
-   PAGE QR CODE & AFFICHE A4 IMPRIMABLE (STYLE AFFICHE OFFICIELLE)
+   PAGE QR CODE & AFFICHE A4 IMPRIMABLE
    ========================================================================== */
 .qr-toolbar {
   background: var(--surface);
@@ -1542,6 +1234,11 @@ body {
   gap: 12px;
   flex-wrap: wrap;
   margin-bottom: 14px;
+}
+
+.qr-toolbar-heading {
+  font-size: 0.92rem;
+  color: var(--navy);
 }
 
 .qr-url-field {
@@ -1592,7 +1289,18 @@ body {
   filter: brightness(1.08);
 }
 
-/* Feuille A4 d'affiche QR Code */
+.btn-secondary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.qr-error-msg {
+  margin: 12px 0;
+  color: #a82210;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
 .poster-sheet {
   position: relative;
   overflow: hidden;

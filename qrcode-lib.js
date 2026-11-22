@@ -367,7 +367,7 @@
   function toSvgString(text, quietZone = 4) {
     const { size, modules } = createQrMatrix(text);
     const total = size + quietZone * 2;
-    let parts = [];
+    const parts = [];
     for (let r = 0; r < size; r++) {
       for (let c = 0; c < size; c++) {
         if (modules[r][c]) {
@@ -375,10 +375,47 @@
         }
       }
     }
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" shape-rendering="crispEdges" role="img" aria-label="QR Code">` +
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 ${total} ${total}" shape-rendering="crispEdges" role="img" aria-label="QR Code">` +
       `<rect width="100%" height="100%" fill="#ffffff"/>` +
       `<path d="${parts.join("")}" fill="#0b2248"/>` +
       `</svg>`;
+  }
+
+  /**
+   * Construit un élément DOM <svg> sécurisé via createElementNS.
+   */
+  function createSvgElement(doc, text, quietZone = 4) {
+    const { size, modules } = createQrMatrix(text);
+    const total = size + quietZone * 2;
+    const parts = [];
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (modules[r][c]) {
+          parts.push(`M${c + quietZone},${r + quietZone}h1v1h-1z`);
+        }
+      }
+    }
+    const ns = "http://www.w3.org/2000/svg";
+    const svg = doc.createElementNS(ns, "svg");
+    svg.setAttribute("width", "240");
+    svg.setAttribute("height", "240");
+    svg.setAttribute("viewBox", `0 0 ${total} ${total}`);
+    svg.setAttribute("shape-rendering", "crispEdges");
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", "QR Code");
+
+    const rect = doc.createElementNS(ns, "rect");
+    rect.setAttribute("width", "100%");
+    rect.setAttribute("height", "100%");
+    rect.setAttribute("fill", "#ffffff");
+
+    const path = doc.createElementNS(ns, "path");
+    path.setAttribute("d", parts.join(""));
+    path.setAttribute("fill", "#0b2248");
+
+    svg.appendChild(rect);
+    svg.appendChild(path);
+    return svg;
   }
 
   function drawToCanvas(canvas, text, pixelSize = 800, quietZone = 4) {
@@ -402,7 +439,7 @@
     return canvas;
   }
 
-  const api = { createQrMatrix, toSvgString, drawToCanvas };
+  const api = { createQrMatrix, toSvgString, createSvgElement, drawToCanvas };
   global.SimpleQR = api;
   if (typeof module !== "undefined" && module.exports) {
     module.exports = api;
