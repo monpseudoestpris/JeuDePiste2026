@@ -116,6 +116,35 @@
           🔄 Remettre les lettres à zéro
         </button>
       </div>
+
+      <!-- Modale Prison Monopoly avec barreaux uniquement par-dessus la zone de saisie des lettres -->
+      <div class="jail-modal" id="jail-modal" hidden role="alert" aria-live="polite" aria-labelledby="jail-modal-title">
+        <div class="jail-bars-overlay" aria-hidden="true">
+          <div class="jail-crossbar top"></div>
+          <div class="jail-bars-row">
+            <span class="jail-bar"></span>
+            <span class="jail-bar"></span>
+            <span class="jail-bar"></span>
+            <span class="jail-bar"></span>
+            <span class="jail-bar"></span>
+            <span class="jail-bar"></span>
+            <span class="jail-bar"></span>
+          </div>
+          <div class="jail-crossbar bottom"></div>
+        </div>
+
+        <div class="jail-modal-card">
+          <div class="jail-modal-badge">🚔 ALLEZ EN PRISON !</div>
+          <h2 class="jail-modal-title" id="jail-modal-title">Pas de lettres au hasard !</h2>
+          <p class="jail-modal-text">
+            Tu as tenté plusieurs mauvaises lettres de suite…
+          </p>
+          <div class="jail-countdown-box">
+            <span class="jail-countdown-label">Libération dans</span>
+            <strong class="jail-countdown-time" id="jail-timer">0:30</strong>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="intro-banner" aria-label="Mode d'emploi">
@@ -160,35 +189,6 @@
     </div>
     <div class="lightbox-viewport" id="lightbox-viewport">
       <img id="lightbox-img" src="" alt="" />
-    </div>
-  </div>
-
-  <!-- Modale Prison Monopoly avec barreaux par-dessus l'écran -->
-  <div class="jail-modal" id="jail-modal" hidden role="dialog" aria-modal="true" aria-labelledby="jail-modal-title">
-    <div class="jail-bars-overlay" aria-hidden="true">
-      <div class="jail-crossbar top"></div>
-      <div class="jail-bars-row">
-        <span class="jail-bar"></span>
-        <span class="jail-bar"></span>
-        <span class="jail-bar"></span>
-        <span class="jail-bar"></span>
-        <span class="jail-bar"></span>
-        <span class="jail-bar"></span>
-        <span class="jail-bar"></span>
-      </div>
-      <div class="jail-crossbar bottom"></div>
-    </div>
-
-    <div class="jail-modal-card">
-      <div class="jail-modal-badge">🚔 ALLEZ EN PRISON !</div>
-      <h2 class="jail-modal-title" id="jail-modal-title">Pas de lettres au hasard !</h2>
-      <p class="jail-modal-text">
-        Tu as tenté plusieurs mauvaises lettres de suite… Résous l'énigme sans passer par la case triche !
-      </p>
-      <div class="jail-countdown-box">
-        <span class="jail-countdown-label">Libération dans</span>
-        <strong class="jail-countdown-time" id="jail-timer">0:30</strong>
-      </div>
     </div>
   </div>
 
@@ -341,12 +341,17 @@
 
       let antiCheat = readPersisted(ANTICHEAT_STORAGE_KEY);
       if (!antiCheat || typeof antiCheat !== "object") {
-        antiCheat = { lockUntil: 0, jailCount: 0, wrongByCell: {} };
+        antiCheat = { lockUntil: 0, jailCountByCell: {}, wrongByCell: {}, lastAttemptByCell: {} };
       } else {
         antiCheat.lockUntil = Number(antiCheat.lockUntil || 0);
-        antiCheat.jailCount = Number(antiCheat.jailCount || 0);
+        if (!antiCheat.jailCountByCell || typeof antiCheat.jailCountByCell !== "object") {
+          antiCheat.jailCountByCell = {};
+        }
         if (!antiCheat.wrongByCell || typeof antiCheat.wrongByCell !== "object") {
           antiCheat.wrongByCell = {};
+        }
+        if (!antiCheat.lastAttemptByCell || typeof antiCheat.lastAttemptByCell !== "object") {
+          antiCheat.lastAttemptByCell = {};
         }
       }
 
@@ -386,9 +391,6 @@
             saveAntiCheat();
           }
           jailAlertEl.hidden = true;
-          if (lightboxEl.hidden) {
-            document.body.style.overflow = "";
-          }
           if (jailIntervalId) {
             clearInterval(jailIntervalId);
             jailIntervalId = null;
@@ -401,7 +403,6 @@
         const remainingSec = Math.max(1, Math.ceil((antiCheat.lockUntil - Date.now()) / 1000));
         jailTimerEl.textContent = formatSeconds(remainingSec);
         jailAlertEl.hidden = false;
-        document.body.style.overflow = "hidden";
 
         if (!jailIntervalId) {
           jailIntervalId = setInterval(syncJailUi, 500);
@@ -409,9 +410,10 @@
       }
 
       function triggerJail(cellKey) {
-        antiCheat.jailCount = (antiCheat.jailCount || 0) + 1;
-        // 30 s, puis 1 min, 2 min, 4 min max
-        const durationSec = 30 * Math.pow(2, Math.min(3, antiCheat.jailCount - 1));
+        const countForCell = (antiCheat.jailCountByCell[cellKey] || 0) + 1;
+        antiCheat.jailCountByCell[cellKey] = countForCell;
+        // Démarre à 30 s pour chaque case, puis plafonne à 1 min (60 s)
+        const durationSec = countForCell === 1 ? 30 : 60;
         antiCheat.lockUntil = Date.now() + durationSec * 1000;
         antiCheat.wrongByCell[cellKey] = 0;
         saveAntiCheat();
@@ -424,13 +426,22 @@
         renderMysteryGrid();
       }
 
+      const ATTEMPT_WINDOW_MS = 60 * 1000; // Si plus de 60 s s'écoulent entre 2 essais sur une case, le compteur d'erreurs repart à zéro
+
       function handleLetterAttempt(cellKey, prevVal, newVal, expectedVal) {
         if (!newVal || newVal === prevVal) return false;
+        const now = Date.now();
         if (newVal === expectedVal) {
           antiCheat.wrongByCell[cellKey] = 0;
+          antiCheat.lastAttemptByCell[cellKey] = now;
           saveAntiCheat();
           return false;
         }
+        const lastTime = Number(antiCheat.lastAttemptByCell[cellKey] || 0);
+        if (lastTime && now - lastTime > ATTEMPT_WINDOW_MS) {
+          antiCheat.wrongByCell[cellKey] = 0;
+        }
+        antiCheat.lastAttemptByCell[cellKey] = now;
         antiCheat.wrongByCell[cellKey] = (antiCheat.wrongByCell[cellKey] || 0) + 1;
         if (antiCheat.wrongByCell[cellKey] >= 3) {
           triggerJail(cellKey);
@@ -816,7 +827,7 @@
         }
         gridState = ["", "", "", "", "", "", ""];
         mysteryState = ["", "", "", "", "", ""];
-        antiCheat = { lockUntil: 0, jailCount: 0, wrongByCell: {} };
+        antiCheat = { lockUntil: 0, jailCountByCell: {}, wrongByCell: {}, lastAttemptByCell: {} };
         saveGrid();
         saveMysteryGrid();
         saveAntiCheat();
@@ -835,7 +846,7 @@
         savedState = {};
         gridState = ["", "", "", "", "", "", ""];
         mysteryState = ["", "", "", "", "", ""];
-        antiCheat = { lockUntil: 0, jailCount: 0, wrongByCell: {} };
+        antiCheat = { lockUntil: 0, jailCountByCell: {}, wrongByCell: {}, lastAttemptByCell: {} };
         saveState();
         saveGrid();
         saveMysteryGrid();
