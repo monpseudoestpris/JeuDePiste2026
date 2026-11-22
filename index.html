@@ -9,7 +9,7 @@
   />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>Indices — Jeu de Piste | Festival du Jeu de Seysses 2026</title>
-  <link rel="stylesheet" href="style.css?v=20261122-8" />
+  <link rel="stylesheet" href="style.css?v=20261122-9" />
 </head>
 <body>
   <main class="container">
@@ -129,13 +129,20 @@
 
     <section class="enigma-list" id="enigma-list" aria-label="Liste des 7 énigmes"></section>
 
-    <!-- Grand encadré BONUS à la fin -->
-    <section class="bonus-finale-card" aria-label="Question Bonus">
-      <div class="bonus-finale-badge">🎁 BONUS</div>
-      <p class="bonus-finale-question" id="bonus-question">
-        Quel est le personnage du monde ludique qui se cache dans cette énigme mystère ?
-      </p>
-      <div id="bonus-hints"></div>
+    <!-- Grand encadré BONUS à la fin (indices rétractés par défaut, dépliables au clic) -->
+    <section class="bonus-finale-card" id="bonus-card" aria-label="Question Bonus">
+      <button type="button" class="bonus-toggle-btn" id="bonus-toggle-btn" aria-expanded="false">
+        <div class="bonus-finale-badge">🎁 BONUS</div>
+        <p class="bonus-finale-question" id="bonus-question">
+          Quel est le personnage du monde ludique qui se cache dans cette énigme mystère ?
+        </p>
+        <div class="bonus-toggle-hint">
+          <span id="bonus-toggle-label">Afficher les indices du Bonus</span>
+          <span class="progress-pill bonus-progress-pill" id="bonus-progress-pill">0/3</span>
+          <span class="chevron bonus-chevron" aria-hidden="true">▾</span>
+        </div>
+      </button>
+      <div class="bonus-body" id="bonus-hints" hidden></div>
     </section>
 
     <footer class="footer-actions">
@@ -198,11 +205,11 @@
     </div>
   </div>
 
-  <script src="indices.js?v=20261122-8" defer></script>
-  <script src="qrcode-lib.js?v=20261122-8" defer></script>
-  <script src="js/storage.js?v=20261122-8" defer></script>
-  <script src="js/jail.js?v=20261122-8" defer></script>
-  <script src="js/lightbox.js?v=20261122-8" defer></script>
-  <script src="js/app.js?v=20261122-8" defer></script>
+  <script src="indices.js?v=20261122-9" defer></script>
+  <script src="qrcode-lib.js?v=20261122-9" defer></script>
+  <script src="js/storage.js?v=20261122-9" defer></script>
+  <script src="js/jail.js?v=20261122-9" defer></script>
+  <script src="js/lightbox.js?v=20261122-9" defer></script>
+  <script src="js/app.js?v=20261122-9" defer></script>
 </body>
 </html>

@@ -23,6 +23,10 @@
   const gridCompleteEl = document.getElementById("easy-grid-complete");
   const mysteryGridEl = document.getElementById("mystery-grid");
   const mysteryCompleteEl = document.getElementById("mystery-grid-complete");
+  const bonusCardEl = document.getElementById("bonus-card");
+  const bonusToggleBtnEl = document.getElementById("bonus-toggle-btn");
+  const bonusToggleLabelEl = document.getElementById("bonus-toggle-label");
+  const bonusProgressPillEl = document.getElementById("bonus-progress-pill");
   const bonusContainerEl = document.getElementById("bonus-hints");
   const jailModalEl = document.getElementById("jail-modal");
   const jailTimerEl = document.getElementById("jail-timer");
@@ -92,6 +96,7 @@
 
   let jailIntervalId = null;
   let openCardId = null;
+  let isBonusOpen = false;
 
   function saveState() {
     storage.writeJson(STORAGE_KEY, savedState);
@@ -497,10 +502,30 @@
   function renderBonusHints() {
     if (!bonusContainerEl) return;
     const bonusList = Array.isArray(config.indicesBonus) ? config.indicesBonus : [];
-    if (!bonusList.length) {
+    const revealed = getRevealedCount("bonus");
+
+    if (bonusCardEl) {
+      bonusCardEl.classList.toggle("is-open", isBonusOpen);
+    }
+    if (bonusToggleBtnEl) {
+      bonusToggleBtnEl.setAttribute("aria-expanded", isBonusOpen ? "true" : "false");
+    }
+    if (bonusToggleLabelEl) {
+      bonusToggleLabelEl.textContent = isBonusOpen
+        ? "Masquer les indices du Bonus"
+        : "Afficher les indices du Bonus";
+    }
+    if (bonusProgressPillEl) {
+      bonusProgressPillEl.textContent = revealed + "/3";
+      bonusProgressPillEl.classList.toggle("has-progress", revealed > 0);
+    }
+
+    bonusContainerEl.hidden = !isBonusOpen || bonusList.length === 0;
+    if (!isBonusOpen || !bonusList.length) {
       bonusContainerEl.replaceChildren();
       return;
     }
+
     const stack = buildHintStack(
       "bonus",
       bonusList,
@@ -510,6 +535,13 @@
     );
     stack.classList.add("bonus-hints-stack");
     bonusContainerEl.replaceChildren(stack);
+  }
+
+  if (bonusToggleBtnEl) {
+    bonusToggleBtnEl.addEventListener("click", () => {
+      isBonusOpen = !isBonusOpen;
+      renderBonusHints();
+    });
   }
 
   document.getElementById("btn-reset-letters").addEventListener("click", () => {
@@ -539,6 +571,8 @@
     savedState = Object.create(null);
     gridState = new Array(7).fill("");
     mysteryState = new Array(6).fill("");
+    openCardId = null;
+    isBonusOpen = false;
     jail.resetAll();
     saveState();
     saveGrid();

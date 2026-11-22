@@ -5,9 +5,10 @@ Site web statique compagnon du **Jeu de Piste** de la **10e Édition du Festival
 - **Stack** : HTML5, CSS3, JavaScript vanilla modulaire sans dépendance externe (compatible GitHub Pages et ouverture locale `file://`), tests automatisés via `node:test`.
 
 ## 2. Current Objective
-Passe d'assainissement architectural (modularité « 1 fichier = 1 responsabilité »), nettoyage du code mort et durcissement sécurité (élimination totale de `innerHTML`, politique CSP stricte, validation des schémas d'URL et des données `localStorage`). **Statut : Terminé et vérifié.**
+Rendre les indices de l'énigme **Bonus** rétractés par défaut et dépliables au clic (accordéon avec compteur `0/3` et chevron, identique à la mécanique des 7 énigmes). **Statut : Terminé et vérifié.**
 
 ## 3. Completed Work
+- Transformation de l'encadré **🎁 BONUS** en accordéon rétractable par défaut (`#bonus-toggle-btn` dans `index.html`, `js/app.js` et `style.css`), avec compteur `0/3` et repli automatique lors d'une réinitialisation globale.
 - Découpage du JavaScript monolithique en modules dédiés dans `js/` (`storage.js`, `jail.js`, `lightbox.js`, `app.js`, `qr-page.js`).
 - Suppression de tout usage de `innerHTML` au profit de `document.createElementNS` (`SimpleQR.createSvgElement`), `replaceChildren()` et `textContent`.
 - Ajout d'une politique `Content-Security-Policy` (`script-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'`) et `Referrer-Policy` sur `index.html` et `qrcode.html`, avec retrait de tous les scripts et styles inline HTML.
